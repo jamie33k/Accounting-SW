@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AccuFlow - Accounting Software for Growing Businesses</title>
+    <title>AccuFlow - Accounting Solutions for Growing Businesses</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,11 +11,12 @@
         .landing-page {
             min-height: 100vh;
             position: relative;
-            background: url('assets/images/Background.jpg') no-repeat center center fixed;
+            /* New background image from Bolder Group */
+            background: url('https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg') no-repeat center center fixed;
             background-size: cover;
         }
         
-        /* Optional overlay to make text more readable */
+        /* Dark overlay to make text readable */
         .landing-page::before {
             content: '';
             position: fixed;
@@ -23,26 +24,28 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.9); /* White overlay with 90% opacity */
+            background: rgba(0, 0, 0, 0.6); /* Darker overlay for better contrast */
             z-index: 0;
             pointer-events: none;
         }
         
-        /* Make sure content sits above the overlay */
+        /* Make sure all content sits above the overlay */
         .navbar, .hero, .features, #pricing, #solutions, .footer {
             position: relative;
             z-index: 1;
         }
         
+        /* Navbar with blur effect */
         .navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding: 16px 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
         
         .nav-container {
@@ -56,9 +59,10 @@
         
         .logo {
             font-size: 24px;
-            font-weight: 600;
-            color: var(--gray-800);
+            font-weight: 700;
+            color: #667eea;
             cursor: pointer;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .nav-links {
@@ -69,14 +73,14 @@
         
         .nav-links a {
             text-decoration: none;
-            color: var(--gray-600);
+            color: #333;
             font-weight: 500;
             cursor: pointer;
             transition: color 0.2s ease;
         }
         
         .nav-links a:hover {
-            color: var(--primary);
+            color: #667eea;
         }
         
         .nav-buttons {
@@ -90,16 +94,15 @@
             border-radius: 8px;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid var(--gray-300);
-            background: white;
-            color: var(--gray-700);
+            transition: all 0.3s ease;
+            border: 1px solid #667eea;
+            background: transparent;
+            color: #667eea;
         }
         
         .btn-outline:hover {
-            background: var(--gray-50);
-            border-color: var(--primary);
-            color: var(--primary);
+            background: #667eea;
+            color: white;
         }
         
         .btn-primary {
@@ -107,14 +110,16 @@
             border-radius: 8px;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             border: none;
-            background: var(--primary);
+            background: #667eea;
             color: white;
         }
         
         .btn-primary:hover {
-            background: var(--primary-dark);
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
         .hero {
@@ -131,17 +136,20 @@
             font-size: 48px;
             line-height: 1.2;
             margin-bottom: 20px;
-            color: var(--gray-800);
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
         
         .hero-content p {
             font-size: 18px;
-            color: var(--gray-600);
+            color: rgba(255,255,255,0.95);
             margin-bottom: 30px;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.3);
         }
         
         .hero-badge {
-            background: var(--primary);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
             color: white;
             padding: 8px 16px;
             border-radius: 30px;
@@ -149,12 +157,15 @@
             font-weight: 600;
             display: inline-block;
             margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
         .features {
             padding: 80px 24px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
         
         .features-container {
@@ -165,12 +176,12 @@
         .section-title {
             font-size: 32px;
             font-weight: 600;
-            color: var(--gray-800);
+            color: #333;
             margin-bottom: 10px;
         }
         
         .section-subtitle {
-            color: var(--gray-600);
+            color: #666;
             margin-bottom: 40px;
             font-size: 18px;
         }
@@ -183,25 +194,25 @@
         
         .feature-card {
             background: white;
-            border: 1px solid var(--gray-200);
+            border: 1px solid #e0e0e0;
             border-radius: 12px;
             padding: 30px;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             cursor: default;
-            box-shadow: var(--box-shadow);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
         
         .feature-card:hover {
-            box-shadow: var(--box-shadow-lg);
-            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: #667eea;
             transform: translateY(-5px);
         }
         
         .feature-icon {
             width: 48px;
             height: 48px;
-            background: var(--primary-light);
-            color: var(--primary);
+            background: #e8f0fe;
+            color: #667eea;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -214,11 +225,11 @@
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 10px;
-            color: var(--gray-800);
+            color: #333;
         }
         
         .feature-description {
-            color: var(--gray-600);
+            color: #666;
             margin-bottom: 20px;
             line-height: 1.6;
         }
@@ -227,7 +238,7 @@
             display: flex;
             gap: 20px;
             padding: 20px 0;
-            border-top: 1px solid var(--gray-200);
+            border-top: 1px solid #e0e0e0;
             margin-top: 20px;
         }
         
@@ -238,16 +249,16 @@
         .stat-value {
             font-size: 20px;
             font-weight: 600;
-            color: var(--primary);
+            color: #667eea;
         }
         
         .stat-label {
             font-size: 12px;
-            color: var(--gray-500);
+            color: #999;
         }
         
         .cta-button {
-            background: var(--primary);
+            background: #667eea;
             color: white;
             border: none;
             padding: 15px 40px;
@@ -255,14 +266,14 @@
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 14px rgba(42, 125, 225, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
         }
         
         .cta-button:hover {
-            background: var(--primary-dark);
+            background: #5a67d8;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(42, 125, 225, 0.4);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
         
         /* Smooth scroll behavior */
@@ -281,11 +292,11 @@
             color: white;
             padding: 40px 24px;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
         
         .footer p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255,255,255,0.8);
         }
         
         /* Badge styles */
@@ -297,23 +308,23 @@
         }
         
         .badge-info {
-            background: var(--info-light);
-            color: var(--info);
+            background: #e8f0fe;
+            color: #667eea;
         }
         
         .badge-success {
-            background: var(--success-light);
-            color: var(--success);
+            background: #e6f7e6;
+            color: #4caf50;
         }
         
         .badge-warning {
-            background: var(--warning-light);
-            color: var(--warning);
+            background: #fff4e5;
+            color: #f59e0b;
         }
         
         .badge-primary {
-            background: var(--primary-light);
-            color: var(--primary);
+            background: #e8f0fe;
+            color: #667eea;
         }
         
         /* Responsive */
@@ -341,6 +352,10 @@
             .nav-buttons {
                 flex-wrap: wrap;
                 justify-content: center;
+            }
+            
+            .hero-content h1 {
+                font-size: 36px;
             }
         }
     </style>
@@ -380,8 +395,8 @@
                 </button>
             </div>
             <div class="hero-image">
-                <div style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.3);">
-                    <i class="fas fa-chart-line" style="font-size: 120px; color: var(--primary); opacity: 0.8;"></i>
+                <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.3);">
+                    <i class="fas fa-chart-line" style="font-size: 120px; color: white; opacity: 0.8;"></i>
                 </div>
             </div>
         </section>
@@ -389,7 +404,7 @@
         <!-- Spotlight Section -->
         <section id="features" class="features">
             <div class="features-container">
-                <span class="hero-badge">SPOTLIGHT</span>
+                <span class="hero-badge" style="background: #667eea; color: white;">SPOTLIGHT</span>
                 <h2 class="section-title">Engineered to Unlock Business Growth</h2>
                 <p class="section-subtitle">Powerful features to help you manage your finances</p>
                 
@@ -425,7 +440,7 @@
                         </div>
                         <h3 class="feature-title">Accounting Across Devices</h3>
                         <p class="feature-description">Whether you're on the web, smartphone or desktop app, promptly send quotes right after meetings, track business expenses, log time, and view reports!</p>
-                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
                             <span class="badge badge-success">Patricia Boyle ></span>
                             <span class="badge badge-warning" style="margin-left: 10px;">QT-000022</span>
                         </div>
@@ -447,12 +462,12 @@
         </section>
 
         <!-- Pricing Section -->
-        <section id="pricing" class="features" style="background: rgba(255, 255, 255, 0.97);">
+        <section id="pricing" class="features" style="background: rgba(255,255,255,0.98);">
             <div class="features-container">
                 <h2 class="section-title">Simple, Transparent Pricing</h2>
                 <p class="section-subtitle">Choose the plan that fits your business</p>
                 <div style="text-align: center; padding: 40px;">
-                    <p style="font-size: 18px; color: var(--gray-600);">Contact sales for custom pricing tailored to your needs.</p>
+                    <p style="font-size: 18px; color: #666;">Contact sales for custom pricing tailored to your needs.</p>
                     <button class="btn-primary" style="margin-top: 20px; padding: 15px 40px;" onclick="window.location.href='pages/contact.html'">
                         Contact Sales
                     </button>
@@ -467,12 +482,12 @@
                 <p class="section-subtitle">From startups to enterprises</p>
                 <div class="feature-grid" style="grid-template-columns: repeat(2, 1fr);">
                     <div class="feature-card">
-                        <i class="fas fa-rocket" style="font-size: 32px; color: var(--primary); margin-bottom: 20px;"></i>
+                        <i class="fas fa-rocket" style="font-size: 32px; color: #667eea; margin-bottom: 20px;"></i>
                         <h3 class="feature-title">Small Business</h3>
                         <p class="feature-description">Perfect for freelancers and small teams. Get started with essential accounting features.</p>
                     </div>
                     <div class="feature-card">
-                        <i class="fas fa-building" style="font-size: 32px; color: var(--primary); margin-bottom: 20px;"></i>
+                        <i class="fas fa-building" style="font-size: 32px; color: #667eea; margin-bottom: 20px;"></i>
                         <h3 class="feature-title">Enterprise</h3>
                         <p class="feature-description">Advanced features for large organizations including multi-user access and custom reports.</p>
                     </div>
