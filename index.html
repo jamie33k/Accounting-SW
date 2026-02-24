@@ -72,12 +72,60 @@
             box-sizing: border-box;
         }
         
+        /* New Logo Styles */
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 24px;
             font-weight: 700;
-            color: #667eea;
             cursor: pointer;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-text {
+            color: #333;
+        }
+        
+        .logo-highlight {
+            color: #667eea;
+            font-weight: 800;
+            position: relative;
+        }
+        
+        .logo-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        
+        .logo:hover .logo-icon {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .logo:hover .logo-highlight {
+            color: #764ba2;
+            transition: color 0.3s ease;
         }
         
         .nav-links {
@@ -315,7 +363,7 @@
             scroll-margin-top: 80px;
         }
         
-        /* Footer - edge to edge with transparency - UPDATED YEAR TO 2026 */
+        /* Footer - edge to edge with transparency */
         .footer {
             background: rgba(33, 33, 33, 0.8);
             backdrop-filter: blur(5px);
@@ -415,10 +463,15 @@
 </head>
 <body>
     <div class="landing-page">
-        <!-- Navigation with working links -->
+        <!-- Navigation with new logo -->
         <nav class="navbar">
             <div class="nav-container">
-                <div class="logo" onclick="window.location.href='index.html'">AccuFlow</div>
+                <!-- New Logo -->
+                <div class="logo" onclick="window.location.href='index.html'">
+                    <span class="logo-icon">📊</span>
+                    <span class="logo-text">Accu<span class="logo-highlight">Flow</span></span>
+                </div>
+                
                 <div class="nav-links">
                     <a href="#features">Features</a>
                     <a href="#pricing">Pricing</a>
@@ -441,7 +494,7 @@
         <section class="hero">
             <div class="hero-content">
                 <span class="hero-badge">KRA-Approved eTIMS Integrator</span>
-                <h1>Comprehensive Accounting Solutions for Growing Businesses</h1>
+                <h1>Comprehensive accounting software for growing businesses</h1>
                 <p>eTIMS-compliant accounting software that helps you send invoices, track inventory, manage cash flow, and file VAT returns to KRA.</p>
                 <button class="cta-button" onclick="window.location.href='pages/register.html'">
                     Get Started <i class="fas fa-arrow-right"></i>
@@ -543,7 +596,7 @@
             </div>
         </section>
 
-        <!-- Footer - UPDATED YEAR TO 2026 -->
+        <!-- Footer -->
         <footer class="footer">
             <p>&copy; 2026 AccuFlow. All rights reserved. | KRA-Approved eTIMS Integrator</p>
         </footer>
