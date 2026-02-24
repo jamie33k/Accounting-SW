@@ -3,19 +3,615 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jobs - AccuFlow</title>
+    <title>Invoices - AccuFlow</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and base styles - same as employees.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar - same as dashboard */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 5px;
+        }
+
+        .sidebar .logo {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .sidebar .logo-icon {
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sidebar .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .sidebar .logo-highlight {
+            color: #667eea;
+            font-weight: 800;
+        }
+
+        .sidebar .nav-menu {
+            padding: 20px;
+        }
+
+        .sidebar .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #333;
+            border-radius: 12px;
+            margin-bottom: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-item i {
+            width: 20px;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        .sidebar .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-item.active {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            border-left: 3px solid #667eea;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info i {
+            font-size: 32px;
+            color: #667eea;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            display: block;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #666;
+            display: block;
+        }
+
+        .logout-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn:hover {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            margin: 0;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .btn-success:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .summary-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .summary-icon.blue {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+        }
+
+        .summary-icon.green {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .summary-icon.orange {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+
+        .summary-icon.purple {
+            background: rgba(155, 89, 182, 0.2);
+            color: #9b59b6;
+        }
+
+        .summary-info {
+            flex: 1;
+        }
+
+        .summary-info h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* Filters Bar */
+        .filters-bar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-options select {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+            min-width: 150px;
+            cursor: pointer;
+        }
+
+        /* Table Container */
+        .table-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: rgba(102, 126, 234, 0.15);
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #333;
+            font-size: 14px;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Status Badges */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: rgba(76, 175, 80, 0.15);
+            color: #2e7d32;
+        }
+
+        .badge-warning {
+            background: rgba(243, 156, 18, 0.15);
+            color: #b45309;
+        }
+
+        .badge-info {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .badge-danger {
+            background: rgba(244, 67, 54, 0.15);
+            color: #c62828;
+        }
+
+        .badge-secondary {
+            background: rgba(108, 117, 125, 0.15);
+            color: #6c757d;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.send:hover {
+            background: #4caf50;
+        }
+
+        .action-btn.download:hover {
+            background: #9b59b6;
+        }
+
+        .action-btn.delete:hover {
+            background: #f44336;
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-options {
+                width: 100%;
+            }
+
+            .filter-options select {
+                width: 100%;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .data-table {
+                min-width: 1000px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-calculator"></i>
-                <span>AccuFlow</span>
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo" onclick="window.location.href='dashboard.html'">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">Accu<span class="logo-highlight">Flow</span></span>
             </div>
             
             <nav class="nav-menu">
@@ -31,11 +627,11 @@
                     <i class="fas fa-clock"></i>
                     <span>Timesheets</span>
                 </a>
-                <a href="jobs.html" class="nav-item active">
+                <a href="jobs.html" class="nav-item">
                     <i class="fas fa-briefcase"></i>
                     <span>Jobs</span>
                 </a>
-                <a href="invoices.html" class="nav-item">
+                <a href="invoices.html" class="nav-item active">
                     <i class="fas fa-file-invoice"></i>
                     <span>Invoices</span>
                 </a>
@@ -52,7 +648,10 @@
             <div class="sidebar-footer">
                 <div class="user-info">
                     <i class="fas fa-user-circle"></i>
-                    <span id="userName">Loading...</span>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Admin User</span>
+                        <span class="user-role" id="userRole">Administrator</span>
+                    </div>
                 </div>
                 <button class="logout-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
@@ -63,138 +662,557 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="content-header">
-                <h1>Jobs</h1>
-                <button class="btn-primary" onclick="openAddJobModal()">
-                    <i class="fas fa-plus"></i> Add Job
+                <h1>Invoices</h1>
+                <button class="btn-primary" onclick="openCreateInvoiceModal()">
+                    <i class="fas fa-plus"></i> Create Invoice
                 </button>
             </header>
+
+            <!-- Summary Cards with KES -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-icon blue">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="summary-info">
+                        <h3>Total Invoiced</h3>
+                        <div class="summary-value">KES 1,245,000</div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-icon green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="summary-info">
+                        <h3>Paid</h3>
+                        <div class="summary-value">KES 892,000</div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="summary-info">
+                        <h3>Due</h3>
+                        <div class="summary-value">KES 353,000</div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-icon purple">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <div class="summary-info">
+                        <h3>Retainage</h3>
+                        <div class="summary-value">KES 124,500</div>
+                    </div>
+                </div>
+            </div>
             
             <!-- Filters -->
             <div class="filters-bar">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search jobs..." onkeyup="filterJobs()">
+                    <input type="text" id="searchInput" placeholder="Search invoices by number, client...">
                 </div>
                 <div class="filter-options">
-                    <select id="statusFilter" onchange="filterJobs()">
+                    <select id="statusFilter">
                         <option value="">All Status</option>
-                        <option value="Active">Active</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Retainage">Retainage</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Sent">Sent</option>
+                        <option value="Partial">Partial</option>
+                        <option value="Draft">Draft</option>
                     </select>
-                    <select id="companyFilter" onchange="filterJobs()">
-                        <option value="">All Companies</option>
+                    <select id="jobFilter">
+                        <option value="">All Jobs</option>
+                        <option value="1">Office Renovation</option>
+                        <option value="2">Construction Project</option>
+                        <option value="3">Consulting Services</option>
                     </select>
                 </div>
             </div>
             
-            <!-- Jobs Table -->
+            <!-- Invoices Table -->
             <div class="table-container">
-                <table class="data-table" id="jobsTable">
+                <table class="data-table" id="invoicesTable">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Job Name</th>
-                            <th>Company</th>
-                            <th>Location</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Budget</th>
+                            <th>Invoice #</th>
+                            <th>Job</th>
+                            <th>Client</th>
+                            <th>Date</th>
+                            <th>Due Date</th>
+                            <th>Total (KES)</th>
+                            <th>Amount Due (KES)</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="jobsTableBody">
+                    <tbody id="invoicesTableBody">
                         <tr>
-                            <td colspan="9" class="text-center">Loading jobs...</td>
+                            <td><strong>INV-2024-001</strong></td>
+                            <td>Office Renovation</td>
+                            <td>ABC Corporation</td>
+                            <td>15 Feb 2026</td>
+                            <td>15 Mar 2026</td>
+                            <td>KES 450,000</td>
+                            <td>KES 0</td>
+                            <td><span class="badge badge-success">Paid</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editInvoice(1)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn send" onclick="sendInvoice(1)" title="Send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                <button class="action-btn download" onclick="downloadInvoice(1)" title="Download">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteInvoice(1)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>INV-2024-002</strong></td>
+                            <td>Construction Project</td>
+                            <td>XYZ Ltd</td>
+                            <td>20 Feb 2026</td>
+                            <td>20 Mar 2026</td>
+                            <td>KES 325,000</td>
+                            <td>KES 325,000</td>
+                            <td><span class="badge badge-info">Sent</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editInvoice(2)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn send" onclick="sendInvoice(2)" title="Send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                <button class="action-btn download" onclick="downloadInvoice(2)" title="Download">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteInvoice(2)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>INV-2024-003</strong></td>
+                            <td>Consulting Services</td>
+                            <td>Tech Solutions</td>
+                            <td>25 Feb 2026</td>
+                            <td>25 Mar 2026</td>
+                            <td>KES 180,000</td>
+                            <td>KES 90,000</td>
+                            <td><span class="badge badge-warning">Partial</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editInvoice(3)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn send" onclick="sendInvoice(3)" title="Send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                <button class="action-btn download" onclick="downloadInvoice(3)" title="Download">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteInvoice(3)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>INV-2024-004</strong></td>
+                            <td>Office Renovation</td>
+                            <td>ABC Corporation</td>
+                            <td>01 Mar 2026</td>
+                            <td>01 Apr 2026</td>
+                            <td>KES 290,000</td>
+                            <td>KES 290,000</td>
+                            <td><span class="badge badge-secondary">Draft</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editInvoice(4)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn send" onclick="sendInvoice(4)" title="Send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                <button class="action-btn download" onclick="downloadInvoice(4)" title="Download">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteInvoice(4)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
-    
-    <!-- Add/Edit Job Modal -->
-    <div id="jobModal" class="modal">
-        <div class="modal-content">
+
+    <!-- Create Invoice Modal -->
+    <div id="invoiceModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
             <div class="modal-header">
-                <h2 id="modalTitle">Add Job</h2>
+                <h2 id="modalTitle">Create Invoice</h2>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
-            <form id="jobForm" onsubmit="saveJob(event)">
-                <input type="hidden" id="jobId">
+            <form id="invoiceForm" onsubmit="saveInvoice(event)">
+                <input type="hidden" id="invoiceId">
                 
-                <div class="form-group">
-                    <label for="jobName">Job Name *</label>
-                    <input type="text" id="jobName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="companyId">Company *</label>
-                    <select id="companyId" required>
-                        <option value="">Select Company</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location">
-                </div>
-                
-                <div class="form-row">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
-                        <label for="startDate">Start Date</label>
-                        <input type="date" id="startDate">
+                        <label><i class="fas fa-hashtag"></i> Invoice Number</label>
+                        <input type="text" id="invoiceNumber" value="INV-2024-005" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-briefcase"></i> Job</label>
+                        <select id="jobId" required>
+                            <option value="1">Office Renovation</option>
+                            <option value="2">Construction Project</option>
+                            <option value="3">Consulting Services</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label><i class="fas fa-building"></i> Client</label>
+                        <select id="clientId" required>
+                            <option value="1">ABC Corporation</option>
+                            <option value="2">XYZ Ltd</option>
+                            <option value="3">Tech Solutions</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Invoice Date</label>
+                        <input type="date" id="invoiceDate" value="2026-03-01" required>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Due Date</label>
+                        <input type="date" id="dueDate" value="2026-03-31" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-percent"></i> Retainage %</label>
+                        <input type="number" id="retainagePercent" value="10" min="0" max="100">
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 15px; color: #333;">Line Items</h3>
+                
+                <div style="background: rgba(102, 126, 234, 0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+                    <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 40px; gap: 10px; margin-bottom: 10px; font-weight: 600; color: #333;">
+                        <div>Description</div>
+                        <div>Qty</div>
+                        <div>Unit Price</div>
+                        <div>Amount</div>
+                        <div></div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="endDate">End Date</label>
-                        <input type="date" id="endDate">
+                    <div id="lineItems">
+                        <!-- Line items will be added here -->
                     </div>
+                    
+                    <button type="button" class="btn-secondary" style="margin-top: 10px;" onclick="addLineItem()">
+                        <i class="fas fa-plus"></i> Add Line Item
+                    </button>
                 </div>
                 
-                <div class="form-group">
-                    <label for="budgetTotal">Budget Total</label>
-                    <input type="number" id="budgetTotal" step="0.01" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select id="status">
-                        <option value="Active">Active</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Retainage">Retainage</option>
-                    </select>
+                <div style="background: rgba(0,0,0,0.03); padding: 15px; border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-weight: 600;">Subtotal:</span>
+                        <span id="subtotal">KES 0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-weight: 600;">Retainage:</span>
+                        <span id="retainageAmount">KES 0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: #667eea;">
+                        <span>Total Amount:</span>
+                        <span id="totalAmount">KES 0</span>
+                    </div>
                 </div>
                 
                 <div class="modal-footer">
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="submit" class="btn-primary">Save Invoice</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
+    <!-- Send Invoice Modal -->
+    <div id="sendModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Send Invoice</h2>
+                <span class="close" onclick="closeSendModal()">&times;</span>
+            </div>
+            <form onsubmit="sendInvoiceConfirm(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Recipient Email</label>
+                    <input type="email" id="recipientEmail" value="client@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Subject</label>
+                    <input type="text" id="emailSubject" value="Invoice from AccuFlow" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-comment"></i> Message</label>
+                    <textarea id="emailMessage" rows="4">Please find attached invoice for your review. Thank you for your business!</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeSendModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Send Invoice</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal">
-        <div class="modal-content modal-small">
+        <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
                 <h2>Confirm Delete</h2>
                 <span class="close" onclick="closeDeleteModal()">&times;</span>
             </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this job?</p>
-                <p class="warning">This action cannot be undone.</p>
+            <div style="text-align: center; padding: 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #f44336; margin-bottom: 15px;"></i>
+                <p style="margin-bottom: 20px; color: #333;">Are you sure you want to delete this invoice?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-                <button type="button" class="btn-danger" onclick="confirmDelete()">Delete</button>
+                <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Delete</button>
             </div>
         </div>
     </div>
-    
-    <script src="../assets/js/api.js"></script>
-    <script src="../assets/js/auth.js"></script>
-    <script src="../assets/js/jobs.js"></script>
+
+    <script>
+        let lineItems = [];
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Get user info
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.fullName) {
+                document.getElementById('userName').textContent = user.fullName;
+            }
+            if (user.role) {
+                document.getElementById('userRole').textContent = 
+                    user.role.charAt(0).toUpperCase() + user.role.slice(1);
+            }
+            
+            // Initialize with sample line items
+            addLineItem();
+            addLineItem();
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchValue = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#invoicesTable tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchValue) ? '' : 'none';
+            });
+        });
+
+        // Filter by status
+        document.getElementById('statusFilter').addEventListener('change', filterTable);
+        document.getElementById('jobFilter').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const jobFilter = document.getElementById('jobFilter').value;
+            const tableRows = document.querySelectorAll('#invoicesTable tbody tr');
+            
+            tableRows.forEach(row => {
+                let showRow = true;
+                
+                if (statusFilter) {
+                    const statusCell = row.querySelector('td:nth-child(8) .badge');
+                    const status = statusCell ? statusCell.textContent : '';
+                    if (status !== statusFilter) showRow = false;
+                }
+                
+                if (jobFilter && showRow) {
+                    const jobCell = row.querySelector('td:nth-child(2)');
+                    const job = jobCell ? jobCell.textContent : '';
+                    if (job !== document.querySelector(`#jobFilter option[value="${jobFilter}"]`).textContent) {
+                        showRow = false;
+                    }
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // Modal functions
+        function openCreateInvoiceModal() {
+            document.getElementById('modalTitle').textContent = 'Create Invoice';
+            document.getElementById('invoiceId').value = '';
+            document.getElementById('invoiceNumber').value = 'INV-2024-00' + (Math.floor(Math.random() * 100));
+            
+            // Reset line items
+            lineItems = [];
+            addLineItem();
+            addLineItem();
+            
+            document.getElementById('invoiceModal').classList.add('show');
+        }
+
+        function editInvoice(id) {
+            document.getElementById('modalTitle').textContent = 'Edit Invoice';
+            document.getElementById('invoiceId').value = id;
+            
+            // In a real app, fetch invoice data from API
+            if (id === 1) {
+                document.getElementById('invoiceNumber').value = 'INV-2024-001';
+                document.getElementById('jobId').value = '1';
+                document.getElementById('clientId').value = '1';
+                document.getElementById('invoiceDate').value = '2026-02-15';
+                document.getElementById('dueDate').value = '2026-03-15';
+                document.getElementById('retainagePercent').value = '0';
+            }
+            
+            document.getElementById('invoiceModal').classList.add('show');
+        }
+
+        function sendInvoice(id) {
+            document.getElementById('sendModal').classList.add('show');
+        }
+
+        function downloadInvoice(id) {
+            alert('Downloading invoice #' + id);
+        }
+
+        function deleteInvoice(id) {
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('invoiceModal').classList.remove('show');
+        }
+
+        function closeSendModal() {
+            document.getElementById('sendModal').classList.remove('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        function addLineItem() {
+            const container = document.getElementById('lineItems');
+            const itemId = lineItems.length;
+            
+            const itemDiv = document.createElement('div');
+            itemDiv.id = `lineItem-${itemId}`;
+            itemDiv.style.display = 'grid';
+            itemDiv.style.gridTemplateColumns = '3fr 1fr 1fr 1fr 40px';
+            itemDiv.style.gap = '10px';
+            itemDiv.style.marginBottom = '10px';
+            
+            itemDiv.innerHTML = `
+                <input type="text" class="item-desc" placeholder="Description" value="Item ${itemId + 1}" onchange="updateLineItem(${itemId})">
+                <input type="number" class="item-qty" value="1" min="1" onchange="updateLineItem(${itemId})">
+                <input type="number" class="item-price" value="${(itemId + 1) * 10000}" min="0" onchange="updateLineItem(${itemId})">
+                <input type="text" class="item-amount" value="KES ${(itemId + 1) * 10000}" readonly>
+                <button type="button" class="btn-danger" style="padding: 8px;" onclick="removeLineItem(${itemId})">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.appendChild(itemDiv);
+            lineItems.push({
+                id: itemId,
+                desc: `Item ${itemId + 1}`,
+                qty: 1,
+                price: (itemId + 1) * 10000
+            });
+            
+            calculateTotals();
+        }
+
+        function updateLineItem(id) {
+            const itemDiv = document.getElementById(`lineItem-${id}`);
+            const desc = itemDiv.querySelector('.item-desc').value;
+            const qty = parseFloat(itemDiv.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(itemDiv.querySelector('.item-price').value) || 0;
+            const amount = qty * price;
+            
+            itemDiv.querySelector('.item-amount').value = 'KES ' + amount.toLocaleString();
+            
+            // Update array
+            const index = lineItems.findIndex(i => i.id === id);
+            if (index !== -1) {
+                lineItems[index] = { id, desc, qty, price };
+            }
+            
+            calculateTotals();
+        }
+
+        function removeLineItem(id) {
+            const itemDiv = document.getElementById(`lineItem-${id}`);
+            itemDiv.remove();
+            
+            const index = lineItems.findIndex(i => i.id === id);
+            if (index !== -1) {
+                lineItems.splice(index, 1);
+            }
+            
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            let subtotal = 0;
+            
+            lineItems.forEach(item => {
+                subtotal += item.qty * item.price;
+            });
+            
+            const retainagePercent = parseFloat(document.getElementById('retainagePercent').value) || 0;
+            const retainageAmount = subtotal * (retainagePercent / 100);
+            const total = subtotal - retainageAmount;
+            
+            document.getElementById('subtotal').textContent = 'KES ' + subtotal.toLocaleString();
+            document.getElementById('retainageAmount').textContent = 'KES ' + retainageAmount.toLocaleString();
+            document.getElementById('totalAmount').textContent = 'KES ' + total.toLocaleString();
+        }
+
+        function saveInvoice(event) {
+            event.preventDefault();
+            alert('Invoice saved successfully!');
+            closeModal();
+        }
+
+        function sendInvoiceConfirm(event) {
+            event.preventDefault();
+            alert('Invoice sent successfully!');
+            closeSendModal();
+        }
+
+        function confirmDelete() {
+            alert('Invoice deleted successfully!');
+            closeDeleteModal();
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    </script>
 </body>
 </html>

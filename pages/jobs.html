@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - AccuFlow</title>
+    <title>Jobs - AccuFlow</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .auth-body {
-            /* New background image */
-            background: url('https://cdn.corporatefinanceinstitute.com/assets/financial-accounting.jpeg') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        /* Reset and base styles - same as previous pages */
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Dark overlay for text readability */
-        .auth-body::before {
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
             content: '';
             position: fixed;
             top: 0;
@@ -34,355 +35,1229 @@
             pointer-events: none;
         }
 
-        /* Ensure content is above overlay */
-        .auth-container {
+        .app-container {
+            display: flex;
+            min-height: 100vh;
             position: relative;
             z-index: 1;
-            max-width: 450px;
-            width: 100%;
         }
 
-        /* Make the login card transparent with blur effect */
-        .auth-card {
-            background: rgba(255, 255, 255, 0.9) !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+        /* Sidebar - same as dashboard */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* Style the "Back to Home" link */
-        .back-home {
-            background: rgba(255, 255, 255, 0.2) !important;
-            backdrop-filter: blur(5px) !important;
-            color: white !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            display: inline-flex;
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 5px;
+        }
+
+        .sidebar .logo {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .sidebar .logo-icon {
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sidebar .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .sidebar .logo-highlight {
+            color: #667eea;
+            font-weight: 800;
+        }
+
+        .sidebar .nav-menu {
+            padding: 20px;
+        }
+
+        .sidebar .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #333;
+            border-radius: 12px;
+            margin-bottom: 4px;
+            font-weight: 500;
             transition: all 0.3s ease;
-            font-size: 16px;
+            text-decoration: none;
         }
 
-        .back-home:hover {
-            background: rgba(255, 255, 255, 0.3) !important;
-            transform: translateY(-2px);
+        .sidebar .nav-item i {
+            width: 20px;
+            font-size: 18px;
+            color: #667eea;
         }
 
-        .back-home i {
+        .sidebar .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-item.active {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            border-left: 3px solid #667eea;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info i {
+            font-size: 32px;
+            color: #667eea;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            display: block;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #666;
+            display: block;
+        }
+
+        .logout-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn:hover {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            margin: 0;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 14px;
         }
 
-        /* Style form inputs */
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .btn-success:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Filters Bar */
+        .filters-bar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-options select {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+            min-width: 150px;
+            cursor: pointer;
+        }
+
+        /* Table Container */
+        .table-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: rgba(102, 126, 234, 0.15);
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #333;
+            font-size: 14px;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Status Badges */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: rgba(76, 175, 80, 0.15);
+            color: #2e7d32;
+        }
+
+        .badge-warning {
+            background: rgba(243, 156, 18, 0.15);
+            color: #b45309;
+        }
+
+        .badge-info {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .badge-primary {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .badge-secondary {
+            background: rgba(108, 117, 125, 0.15);
+            color: #6c757d;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.costs:hover {
+            background: #4caf50;
+        }
+
+        .action-btn.delete:hover {
+            background: #f44336;
+        }
+
+        /* Budget Status Indicators */
+        .budget-status {
+            font-weight: 600;
+        }
+
+        .budget-status.normal {
+            color: #2e7d32;
+        }
+
+        .budget-status.warning {
+            color: #b45309;
+        }
+
+        .budget-status.over {
+            color: #c62828;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+
+        .close {
+            font-size: 28px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #f44336;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
 
         .form-group label {
-            color: white !important;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            font-weight: 600;
-            margin-bottom: 8px;
             display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
             font-size: 14px;
         }
 
         .form-group label i {
-            color: white !important;
             margin-right: 8px;
-            width: 16px;
+            color: #667eea;
         }
 
-        .form-group input {
-            background: rgba(255, 255, 255, 0.9) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            padding: 14px 16px;
-            font-size: 15px;
-            transition: all 0.3s ease;
+            font-size: 14px;
             color: #333;
-            width: 100%;
-            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
-        .form-group input:focus {
-            background: white !important;
-            border-color: #667eea !important;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2) !important;
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
-        .form-group input::placeholder {
-            color: #999;
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
-        /* Style the submit button */
-        .btn-primary {
-            background: #667eea !important;
-            border: none !important;
-            padding: 16px !important;
-            font-size: 16px !important;
-            font-weight: 600 !important;
-            border-radius: 12px !important;
-            color: white !important;
-            cursor: pointer;
-            transition: all 0.3s ease !important;
-            width: 100%;
+        .modal-footer {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary:hover {
-            background: #5a67d8 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3) !important;
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Style the footer text */
-        .auth-footer {
-            color: rgba(255, 255, 255, 0.9) !important;
-            border-top: 2px solid rgba(255, 255, 255, 0.2) !important;
+            justify-content: flex-end;
+            gap: 10px;
             margin-top: 25px;
-            padding-top: 25px;
-            text-align: center;
         }
 
-        .auth-footer a {
-            color: white !important;
-            font-weight: 600;
-            text-decoration: none;
+        /* Cost Details */
+        .cost-details {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
         }
 
-        .auth-footer a:hover {
-            text-decoration: underline;
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        /* Style header text */
-        .auth-header {
-            text-align: center;
-            margin-bottom: 30px;
+        .cost-item:last-child {
+            border-bottom: none;
         }
 
-        .auth-header .logo {
-            color: white !important;
-            font-size: 28px;
+        .cost-item.total {
             font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            display: inline-block;
-        }
-
-        .auth-header h2 {
-            color: white !important;
-            font-size: 28px;
-            margin-bottom: 8px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        .auth-header p {
-            color: rgba(255, 255, 255, 0.9) !important;
+            color: #667eea;
             font-size: 16px;
         }
 
-        /* Alert messages */
-        .alert {
-            background: rgba(255, 255, 255, 0.9) !important;
-            backdrop-filter: blur(5px) !important;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
             align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .alert-error {
-            background: rgba(248, 215, 218, 0.9) !important;
-            color: #721c24 !important;
-            border: 1px solid rgba(245, 198, 203, 0.3) !important;
-        }
-
-        .alert-success {
-            background: rgba(212, 237, 218, 0.9) !important;
-            color: #155724 !important;
-            border: 1px solid rgba(195, 230, 203, 0.3) !important;
-        }
-
-        .alert i {
-            font-size: 18px;
-        }
-
-        /* Remember me checkbox */
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-        }
-
-        .checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
+            justify-content: center;
             cursor: pointer;
-        }
-
-        .checkbox input {
-            width: auto;
-            accent-color: #667eea;
-        }
-
-        .forgot-link {
-            color: white !important;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .forgot-link:hover {
-            text-decoration: underline;
+            color: #667eea;
         }
 
         /* Responsive */
-        @media (max-width: 480px) {
-            .auth-card {
-                padding: 30px 20px;
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
             }
 
-            .auth-header h2 {
-                font-size: 24px;
+            .sidebar.show {
+                transform: translateX(0);
             }
 
-            .form-options {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-header {
                 flex-direction: column;
-                gap: 10px;
-                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-options {
+                width: 100%;
+            }
+
+            .filter-options select {
+                width: 100%;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .data-table {
+                min-width: 1000px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
-<body class="auth-body">
-    <div class="auth-container">
-        <a href="../index.html" class="back-home">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </a>
-        
-        <div class="auth-card">
-            <div class="auth-header">
-                <div class="logo" onclick="window.location.href='../index.html'">AccuFlow</div>
-                <h2>Welcome Back</h2>
-                <p>Sign in to your account</p>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo" onclick="window.location.href='dashboard.html'">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">Accu<span class="logo-highlight">Flow</span></span>
             </div>
             
-            <div id="alertContainer"></div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="employees.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Employees</span>
+                </a>
+                <a href="timesheets.html" class="nav-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Timesheets</span>
+                </a>
+                <a href="jobs.html" class="nav-item active">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Jobs</span>
+                </a>
+                <a href="invoices.html" class="nav-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Invoices</span>
+                </a>
+                <a href="vendors.html" class="nav-item">
+                    <i class="fas fa-truck"></i>
+                    <span>Vendors</span>
+                </a>
+                <a href="reports.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
             
-            <form id="loginForm">
-                <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="email" placeholder="Enter your email" required>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Admin User</span>
+                        <span class="user-role" id="userRole">Administrator</span>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
-                </div>
-                
-                <div class="form-options">
-                    <label class="checkbox">
-                        <input type="checkbox" id="remember"> Remember me
-                    </label>
-                    <a href="#" class="forgot-link" onclick="alert('Please contact admin@accuflow.com to reset your password.')">Forgot password?</a>
-                </div>
-                
-                <button type="submit" class="btn-primary" id="loginButton">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
                 </button>
-            </form>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Jobs</h1>
+                <button class="btn-primary" onclick="openAddJobModal()">
+                    <i class="fas fa-plus"></i> Add Job
+                </button>
+            </header>
             
-            <div class="auth-footer">
-                <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search jobs by name, company, location...">
+                </div>
+                <div class="filter-options">
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Retainage">Retainage</option>
+                    </select>
+                    <select id="companyFilter">
+                        <option value="">All Companies</option>
+                        <option value="1">ABC Construction</option>
+                        <option value="2">XYZ Developers</option>
+                        <option value="3">BuildWell Ltd</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Jobs Table -->
+            <div class="table-container">
+                <table class="data-table" id="jobsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Job Name</th>
+                            <th>Company</th>
+                            <th>Location</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Budget (KES)</th>
+                            <th>Actual Cost (KES)</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jobsTableBody">
+                        <tr>
+                            <td>1</td>
+                            <td><strong>Office Renovation</strong></td>
+                            <td>ABC Construction</td>
+                            <td>Nairobi, CBD</td>
+                            <td>01 Jan 2026</td>
+                            <td>30 Jun 2026</td>
+                            <td>KES 2,500,000</td>
+                            <td>KES 1,850,000</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editJob(1)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewJob(1)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn costs" onclick="viewJobCosts(1)" title="View Costs">
+                                    <i class="fas fa-chart-pie"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteJob(1)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Residential Complex</strong></td>
+                            <td>XYZ Developers</td>
+                            <td>Mombasa, Nyali</td>
+                            <td>15 Feb 2026</td>
+                            <td>15 Dec 2026</td>
+                            <td>KES 8,500,000</td>
+                            <td>KES 3,200,000</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editJob(2)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewJob(2)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn costs" onclick="viewJobCosts(2)" title="View Costs">
+                                    <i class="fas fa-chart-pie"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteJob(2)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Highway Bridge</strong></td>
+                            <td>BuildWell Ltd</td>
+                            <td>Nakuru</td>
+                            <td>10 Mar 2025</td>
+                            <td>10 Mar 2026</td>
+                            <td>KES 15,000,000</td>
+                            <td>KES 14,200,000</td>
+                            <td><span class="badge badge-primary">Completed</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editJob(3)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewJob(3)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn costs" onclick="viewJobCosts(3)" title="View Costs">
+                                    <i class="fas fa-chart-pie"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteJob(3)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>Shopping Mall</strong></td>
+                            <td>ABC Construction</td>
+                            <td>Kisumu</td>
+                            <td>20 Apr 2025</td>
+                            <td>20 Apr 2026</td>
+                            <td>KES 12,000,000</td>
+                            <td>KES 11,500,000</td>
+                            <td><span class="badge badge-warning">Retainage</span></td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editJob(4)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewJob(4)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn costs" onclick="viewJobCosts(4)" title="View Costs">
+                                    <i class="fas fa-chart-pie"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteJob(4)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Job Modal -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Job</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="jobForm" onsubmit="saveJob(event)">
+                <input type="hidden" id="jobId">
+                
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Job Name</label>
+                    <input type="text" id="jobName" placeholder="Enter job name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Company</label>
+                    <select id="companyId" required>
+                        <option value="">Select Company</option>
+                        <option value="1">ABC Construction</option>
+                        <option value="2">XYZ Developers</option>
+                        <option value="3">BuildWell Ltd</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Location</label>
+                    <input type="text" id="location" placeholder="Enter location">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Start Date</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> End Date</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-money-bill"></i> Budget (KES)</label>
+                    <input type="number" id="budgetTotal" placeholder="Enter budget amount" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> Status</label>
+                    <select id="status">
+                        <option value="Active">Active</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Retainage">Retainage</option>
+                    </select>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Job</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Job Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Job Details</h2>
+                <span class="close" onclick="closeViewModal()">&times;</span>
+            </div>
+            <div id="viewDetails" class="cost-details">
+                <!-- Details will be populated by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Costs Modal -->
+    <div id="costsModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Job Cost Analysis</h2>
+                <span class="close" onclick="closeCostsModal()">&times;</span>
+            </div>
+            <div id="costsDetails">
+                <!-- Costs will be populated by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCostsModal()">Close</button>
+                <button class="btn-primary" onclick="exportJobCosts()">Export Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+            </div>
+            <div style="text-align: center; padding: 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #f44336; margin-bottom: 15px;"></i>
+                <p style="margin-bottom: 20px; color: #333;">Are you sure you want to delete this job?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Delete</button>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const button = document.getElementById('loginButton');
-            
-            // Demo credentials for testing
-            const DEMO_EMAIL = 'admin@demo.com';
-            const DEMO_PASSWORD = 'password';
-            
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
-            
-            try {
-                // Simulate API call for demo
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
-                    localStorage.setItem('user', JSON.stringify({ 
-                        email: email, 
-                        fullName: 'Admin User',
-                        role: 'admin' 
-                    }));
-                    
-                    showAlert('Login successful! Redirecting...', 'success');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1500);
-                } else {
-                    throw new Error('Invalid email or password');
-                }
-            } catch (error) {
-                button.disabled = false;
-                button.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
-                showAlert(error.message, 'error');
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Get user info
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.fullName) {
+                document.getElementById('userName').textContent = user.fullName;
+            }
+            if (user.role) {
+                document.getElementById('userRole').textContent = 
+                    user.role.charAt(0).toUpperCase() + user.role.slice(1);
             }
         });
 
-        function showAlert(message, type) {
-            const alertContainer = document.getElementById('alertContainer');
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type}`;
-            alertDiv.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-                <span>${message}</span>
-            `;
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchValue = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#jobsTable tbody tr');
             
-            alertContainer.innerHTML = '';
-            alertContainer.appendChild(alertDiv);
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchValue) ? '' : 'none';
+            });
+        });
+
+        // Filter by status and company
+        document.getElementById('statusFilter').addEventListener('change', filterTable);
+        document.getElementById('companyFilter').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const companyFilter = document.getElementById('companyFilter').value;
+            const tableRows = document.querySelectorAll('#jobsTable tbody tr');
             
-            setTimeout(() => {
-                alertDiv.remove();
-            }, 5000);
+            tableRows.forEach(row => {
+                let showRow = true;
+                
+                if (statusFilter) {
+                    const statusCell = row.querySelector('td:nth-child(9) .badge');
+                    const status = statusCell ? statusCell.textContent : '';
+                    if (status !== statusFilter) showRow = false;
+                }
+                
+                if (companyFilter && showRow) {
+                    const companyCell = row.querySelector('td:nth-child(3)');
+                    const company = companyCell ? companyCell.textContent : '';
+                    if (company !== document.querySelector(`#companyFilter option[value="${companyFilter}"]`).textContent) {
+                        showRow = false;
+                    }
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
         }
 
-        // Pre-fill remembered email
-        const rememberedEmail = localStorage.getItem('remember_email');
-        if (rememberedEmail) {
-            document.getElementById('email').value = rememberedEmail;
-            document.getElementById('remember').checked = true;
+        // Modal functions
+        function openAddJobModal() {
+            document.getElementById('modalTitle').textContent = 'Add Job';
+            document.getElementById('jobId').value = '';
+            document.getElementById('jobName').value = '';
+            document.getElementById('companyId').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('budgetTotal').value = '';
+            document.getElementById('status').value = 'Active';
+            document.getElementById('jobModal').classList.add('show');
+        }
+
+        function editJob(id) {
+            document.getElementById('modalTitle').textContent = 'Edit Job';
+            document.getElementById('jobId').value = id;
+            
+            // Populate with sample data based on ID
+            if (id === 1) {
+                document.getElementById('jobName').value = 'Office Renovation';
+                document.getElementById('companyId').value = '1';
+                document.getElementById('location').value = 'Nairobi, CBD';
+                document.getElementById('startDate').value = '2026-01-01';
+                document.getElementById('endDate').value = '2026-06-30';
+                document.getElementById('budgetTotal').value = '2500000';
+                document.getElementById('status').value = 'Active';
+            } else if (id === 2) {
+                document.getElementById('jobName').value = 'Residential Complex';
+                document.getElementById('companyId').value = '2';
+                document.getElementById('location').value = 'Mombasa, Nyali';
+                document.getElementById('startDate').value = '2026-02-15';
+                document.getElementById('endDate').value = '2026-12-15';
+                document.getElementById('budgetTotal').value = '8500000';
+                document.getElementById('status').value = 'Active';
+            }
+            
+            document.getElementById('jobModal').classList.add('show');
+        }
+
+        function viewJob(id) {
+            const viewDetails = document.getElementById('viewDetails');
+            
+            let details = '';
+            if (id === 1) {
+                details = `
+                    <div class="cost-item"><strong>Job ID:</strong> 1</div>
+                    <div class="cost-item"><strong>Job Name:</strong> Office Renovation</div>
+                    <div class="cost-item"><strong>Company:</strong> ABC Construction</div>
+                    <div class="cost-item"><strong>Location:</strong> Nairobi, CBD</div>
+                    <div class="cost-item"><strong>Start Date:</strong> 01 Jan 2026</div>
+                    <div class="cost-item"><strong>End Date:</strong> 30 Jun 2026</div>
+                    <div class="cost-item"><strong>Budget:</strong> KES 2,500,000</div>
+                    <div class="cost-item"><strong>Actual Cost:</strong> KES 1,850,000</div>
+                    <div class="cost-item"><strong>Variance:</strong> <span style="color: #4caf50;">+KES 650,000</span></div>
+                    <div class="cost-item"><strong>Status:</strong> <span class="badge badge-success">Active</span></div>
+                `;
+            } else if (id === 2) {
+                details = `
+                    <div class="cost-item"><strong>Job ID:</strong> 2</div>
+                    <div class="cost-item"><strong>Job Name:</strong> Residential Complex</div>
+                    <div class="cost-item"><strong>Company:</strong> XYZ Developers</div>
+                    <div class="cost-item"><strong>Location:</strong> Mombasa, Nyali</div>
+                    <div class="cost-item"><strong>Start Date:</strong> 15 Feb 2026</div>
+                    <div class="cost-item"><strong>End Date:</strong> 15 Dec 2026</div>
+                    <div class="cost-item"><strong>Budget:</strong> KES 8,500,000</div>
+                    <div class="cost-item"><strong>Actual Cost:</strong> KES 3,200,000</div>
+                    <div class="cost-item"><strong>Variance:</strong> <span style="color: #4caf50;">+KES 5,300,000</span></div>
+                    <div class="cost-item"><strong>Status:</strong> <span class="badge badge-success">Active</span></div>
+                `;
+            }
+            
+            viewDetails.innerHTML = details;
+            document.getElementById('viewModal').classList.add('show');
+        }
+
+        function viewJobCosts(id) {
+            const costsDetails = document.getElementById('costsDetails');
+            
+            let costs = '';
+            if (id === 1) {
+                costs = `
+                    <div class="cost-details">
+                        <h3 style="margin-bottom: 15px; color: #333;">Cost Breakdown - Office Renovation</h3>
+                        <div class="cost-item"><span>Labor:</span> <span>KES 850,000</span></div>
+                        <div class="cost-item"><span>Materials:</span> <span>KES 650,000</span></div>
+                        <div class="cost-item"><span>Equipment:</span> <span>KES 250,000</span></div>
+                        <div class="cost-item"><span>Subcontractors:</span> <span>KES 100,000</span></div>
+                        <div class="cost-item total"><span>Total:</span> <span>KES 1,850,000</span></div>
+                        
+                        <div style="margin-top: 20px;">
+                            <div class="cost-item"><span>Total Hours:</span> <span>1,250 hrs</span></div>
+                            <div class="cost-item"><span>Regular Hours:</span> <span>1,100 hrs</span></div>
+                            <div class="cost-item"><span>Overtime Hours:</span> <span>150 hrs</span></div>
+                            <div class="cost-item"><span>Average Rate:</span> <span>KES 680/hr</span></div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                            <div class="cost-item"><span>Budget:</span> <span>KES 2,500,000</span></div>
+                            <div class="cost-item"><span>Remaining:</span> <span style="color: #4caf50;">KES 650,000</span></div>
+                            <div class="cost-item"><span>Progress:</span> <span>74%</span></div>
+                        </div>
+                        
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill" style="width: 74%;"></div>
+                        </div>
+                    </div>
+                `;
+            } else if (id === 2) {
+                costs = `
+                    <div class="cost-details">
+                        <h3 style="margin-bottom: 15px; color: #333;">Cost Breakdown - Residential Complex</h3>
+                        <div class="cost-item"><span>Labor:</span> <span>KES 1,500,000</span></div>
+                        <div class="cost-item"><span>Materials:</span> <span>KES 1,200,000</span></div>
+                        <div class="cost-item"><span>Equipment:</span> <span>KES 350,000</span></div>
+                        <div class="cost-item"><span>Subcontractors:</span> <span>KES 150,000</span></div>
+                        <div class="cost-item total"><span>Total:</span> <span>KES 3,200,000</span></div>
+                        
+                        <div style="margin-top: 20px;">
+                            <div class="cost-item"><span>Total Hours:</span> <span>2,100 hrs</span></div>
+                            <div class="cost-item"><span>Regular Hours:</span> <span>1,900 hrs</span></div>
+                            <div class="cost-item"><span>Overtime Hours:</span> <span>200 hrs</span></div>
+                            <div class="cost-item"><span>Average Rate:</span> <span>KES 715/hr</span></div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                            <div class="cost-item"><span>Budget:</span> <span>KES 8,500,000</span></div>
+                            <div class="cost-item"><span>Remaining:</span> <span style="color: #4caf50;">KES 5,300,000</span></div>
+                            <div class="cost-item"><span>Progress:</span> <span>38%</span></div>
+                        </div>
+                        
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill" style="width: 38%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            costsDetails.innerHTML = costs;
+            document.getElementById('costsModal').classList.add('show');
+        }
+
+        function deleteJob(id) {
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('jobModal').classList.remove('show');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('show');
+        }
+
+        function closeCostsModal() {
+            document.getElementById('costsModal').classList.remove('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        function saveJob(event) {
+            event.preventDefault();
+            alert('Job saved successfully!');
+            closeModal();
+        }
+
+        function confirmDelete() {
+            alert('Job deleted successfully!');
+            closeDeleteModal();
+        }
+
+        function exportJobCosts() {
+            alert('Exporting job cost report...');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
         }
     </script>
 </body>

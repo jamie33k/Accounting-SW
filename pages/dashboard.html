@@ -5,17 +5,680 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - AccuFlow</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Reliable background image from Pexels */
+            background: url('https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Dark overlay - same as homepage */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* App container */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar - glassmorphism style */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 5px;
+        }
+
+        .sidebar .logo {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .sidebar .logo-icon {
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sidebar .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .sidebar .logo-highlight {
+            color: #667eea;
+            font-weight: 800;
+        }
+
+        .sidebar .nav-menu {
+            padding: 20px;
+        }
+
+        .sidebar .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #333;
+            border-radius: 12px;
+            margin-bottom: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-item i {
+            width: 20px;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        .sidebar .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-item.active {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            border-left: 3px solid #667eea;
+        }
+
+        .sidebar .nav-item.active i {
+            color: #667eea;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info i {
+            font-size: 32px;
+            color: #667eea;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            display: block;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #666;
+            display: block;
+        }
+
+        .logout-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn:hover {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            margin: 0;
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .date-range input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .date-range span {
+            color: white;
+            font-weight: 500;
+        }
+
+        .date-range button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-range button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* KPI Grid - Updated with KES */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .kpi-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .kpi-icon.blue {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .kpi-icon.green {
+            background: rgba(76, 175, 80, 0.15);
+            color: #4caf50;
+        }
+
+        .kpi-icon.purple {
+            background: rgba(155, 89, 182, 0.15);
+            color: #9b59b6;
+        }
+
+        .kpi-icon.orange {
+            background: rgba(243, 156, 18, 0.15);
+            color: #f39c12;
+        }
+
+        /* KPI Values with KES */
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .kpi-trend.positive {
+            color: #4caf50;
+        }
+
+        .kpi-trend.positive i {
+            color: #4caf50;
+        }
+
+        .kpi-trend.negative {
+            color: #f44336;
+        }
+
+        .kpi-trend.negative i {
+            color: #f44336;
+        }
+
+        .kpi-trend.neutral {
+            color: #666;
+        }
+
+        /* Charts Row */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-header select {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .ml-badge {
+            background: rgba(102, 126, 234, 0.3);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        canvas {
+            max-height: 300px;
+            width: 100% !important;
+        }
+
+        /* Insights Row */
+        .insights-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .insights-card, .recent-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .insights-card h3, .recent-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insights-list, .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .insight-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .insight-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .insight-item i {
+            width: 30px;
+            height: 30px;
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+        }
+
+        .insight-item.warning i {
+            background: rgba(243, 156, 18, 0.3);
+            color: #f39c12;
+        }
+
+        .insight-item.success i {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .insight-content {
+            flex: 1;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .insight-description {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .recent-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .recent-item i {
+            width: 30px;
+            height: 30px;
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+        }
+
+        .recent-details {
+            flex: 1;
+        }
+
+        .recent-title {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .recent-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .recent-time {
+            color: #666;
+        }
+
+        .recent-amount {
+            font-weight: 600;
+        }
+
+        .recent-amount.positive {
+            color: #4caf50;
+        }
+
+        .recent-amount.negative {
+            color: #f44336;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+
+            .insights-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .date-range {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-calculator"></i>
-                <span>AccuFlow</span>
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo" onclick="window.location.href='dashboard.html'">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">Accu<span class="logo-highlight">Flow</span></span>
             </div>
             
             <nav class="nav-menu">
@@ -52,7 +715,10 @@
             <div class="sidebar-footer">
                 <div class="user-info">
                     <i class="fas fa-user-circle"></i>
-                    <span id="userName">Loading...</span>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Admin User</span>
+                        <span class="user-role" id="userRole">Administrator</span>
+                    </div>
                 </div>
                 <button class="logout-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
@@ -65,66 +731,66 @@
             <header class="content-header">
                 <h1>Dashboard</h1>
                 <div class="date-range">
-                    <input type="date" id="startDate">
+                    <input type="date" id="startDate" value="2026-02-01">
                     <span>to</span>
-                    <input type="date" id="endDate">
-                    <button class="btn-primary" onclick="refreshData()">
+                    <input type="date" id="endDate" value="2026-02-24">
+                    <button onclick="refreshData()">
                         <i class="fas fa-sync-alt"></i> Update
                     </button>
                 </div>
             </header>
             
-            <!-- KPI Cards -->
+            <!-- KPI Cards - Updated with KES -->
             <div class="kpi-grid">
                 <div class="kpi-card">
-                    <div class="kpi-icon blue">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <div class="kpi-info">
+                    <div class="kpi-header">
                         <h3>Total Income</h3>
-                        <p class="kpi-value" id="totalIncome">$0</p>
-                        <p class="kpi-trend positive">
-                            <i class="fas fa-arrow-up"></i> <span id="incomeTrend">0%</span>
-                        </p>
+                        <div class="kpi-icon blue">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value" id="totalIncome">KES 124,500</div>
+                    <div class="kpi-trend positive">
+                        <i class="fas fa-arrow-up"></i> <span id="incomeTrend">12.5%</span>
                     </div>
                 </div>
                 
                 <div class="kpi-card">
-                    <div class="kpi-icon green">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="kpi-info">
+                    <div class="kpi-header">
                         <h3>Total Expenses</h3>
-                        <p class="kpi-value" id="totalExpenses">$0</p>
-                        <p class="kpi-trend negative">
-                            <i class="fas fa-arrow-down"></i> <span id="expenseTrend">0%</span>
-                        </p>
+                        <div class="kpi-icon green">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value" id="totalExpenses">KES 78,200</div>
+                    <div class="kpi-trend negative">
+                        <i class="fas fa-arrow-down"></i> <span id="expenseTrend">8.3%</span>
                     </div>
                 </div>
                 
                 <div class="kpi-card">
-                    <div class="kpi-icon purple">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <div class="kpi-info">
+                    <div class="kpi-header">
                         <h3>Net Profit</h3>
-                        <p class="kpi-value" id="netProfit">$0</p>
-                        <p class="kpi-trend" id="profitMargin">
-                            <span>Margin: 0%</span>
-                        </p>
+                        <div class="kpi-icon purple">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value" id="netProfit">KES 46,300</div>
+                    <div class="kpi-trend positive">
+                        <i class="fas fa-arrow-up"></i> <span id="profitTrend">15.2%</span>
                     </div>
                 </div>
                 
                 <div class="kpi-card">
-                    <div class="kpi-icon orange">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="kpi-info">
+                    <div class="kpi-header">
                         <h3>Due Invoices</h3>
-                        <p class="kpi-value" id="dueInvoices">0</p>
-                        <p class="kpi-trend">
-                            <span id="dueAmount">$0 due</span>
-                        </p>
+                        <div class="kpi-icon orange">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value" id="dueInvoices">KES 12,450</div>
+                    <div class="kpi-trend neutral">
+                        <i class="fas fa-minus"></i> <span id="dueCount">3 invoices</span>
                     </div>
                 </div>
             </div>
@@ -133,7 +799,7 @@
             <div class="charts-row">
                 <div class="chart-card">
                     <div class="chart-header">
-                        <h3>Income vs Expenses</h3>
+                        <h3><i class="fas fa-chart-line"></i> Income vs Expenses</h3>
                         <select id="chartPeriod">
                             <option value="6">Last 6 Months</option>
                             <option value="12" selected>Last 12 Months</option>
@@ -145,35 +811,250 @@
                 
                 <div class="chart-card">
                     <div class="chart-header">
-                        <h3>ML Predictions</h3>
-                        <span class="badge ml-badge">AI Powered</span>
+                        <h3><i class="fas fa-robot"></i> ML Predictions</h3>
+                        <span class="ml-badge">AI Powered</span>
                     </div>
                     <canvas id="predictionChart"></canvas>
                 </div>
             </div>
             
-            <!-- ML Insights and Recent Activity -->
+            <!-- Insights Row -->
             <div class="insights-row">
                 <div class="insights-card">
-                    <h3><i class="fas fa-robot"></i> AI Insights</h3>
+                    <h3><i class="fas fa-lightbulb"></i> AI Insights</h3>
                     <div class="insights-list" id="mlInsights">
-                        <div class="insight-item loading">Loading insights...</div>
+                        <div class="insight-item warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="insight-content">
+                                <div class="insight-title">Unusual expense detected</div>
+                                <div class="insight-description">Marketing expenses are 45% higher this month</div>
+                            </div>
+                        </div>
+                        <div class="insight-item success">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="insight-content">
+                                <div class="insight-title">Profit margin improving</div>
+                                <div class="insight-description">Net profit margin up 5.2% from last quarter</div>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <div class="insight-content">
+                                <div class="insight-title">Cash flow forecast</div>
+                                <div class="insight-description">Expected surplus of KES 25,000 next month</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="recent-card">
-                    <h3>Recent Transactions</h3>
+                    <h3><i class="fas fa-history"></i> Recent Transactions</h3>
                     <div class="recent-list" id="recentTransactions">
-                        <div class="recent-item loading">Loading transactions...</div>
+                        <div class="recent-item">
+                            <i class="fas fa-file-invoice"></i>
+                            <div class="recent-details">
+                                <div class="recent-title">Invoice #INV-001 - ABC Corp</div>
+                                <div class="recent-meta">
+                                    <span class="recent-time">Today, 10:30 AM</span>
+                                    <span class="recent-amount positive">KES 5,200</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="recent-item">
+                            <i class="fas fa-truck"></i>
+                            <div class="recent-details">
+                                <div class="recent-title">Payment to Vendor XYZ</div>
+                                <div class="recent-meta">
+                                    <span class="recent-time">Yesterday, 3:45 PM</span>
+                                    <span class="recent-amount negative">KES 1,800</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="recent-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="recent-details">
+                                <div class="recent-title">Timesheet - John Doe</div>
+                                <div class="recent-meta">
+                                    <span class="recent-time">Yesterday, 11:20 AM</span>
+                                    <span class="recent-amount negative">KES 950</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="recent-item">
+                            <i class="fas fa-file-invoice"></i>
+                            <div class="recent-details">
+                                <div class="recent-title">Invoice #INV-002 - XYZ Ltd</div>
+                                <div class="recent-meta">
+                                    <span class="recent-time">2 days ago</span>
+                                    <span class="recent-amount positive">KES 3,450</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../assets/js/api.js"></script>
-    <script src="../assets/js/auth.js"></script>
-    <script src="../assets/js/dashboard.js"></script>
+    <script>
+        // Get user info from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.fullName) {
+                document.getElementById('userName').textContent = user.fullName;
+            }
+            if (user.role) {
+                document.getElementById('userRole').textContent = 
+                    user.role.charAt(0).toUpperCase() + user.role.slice(1);
+            }
+            
+            // Initialize charts
+            initCharts();
+        });
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Initialize charts with KES formatting
+        function initCharts() {
+            // Income vs Expenses Chart
+            const incomeCtx = document.getElementById('incomeExpenseChart').getContext('2d');
+            new Chart(incomeCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Income',
+                        data: [45000, 52000, 48000, 53000, 49000, 51000, 55000, 58000, 54000, 56000, 59000, 62000],
+                        borderColor: '#4caf50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Expenses',
+                        data: [38000, 35000, 32000, 34000, 36000, 33000, 35000, 37000, 34000, 36000, 38000, 35000],
+                        borderColor: '#f44336',
+                        backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#333'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': KES ' + context.raw.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#333',
+                                callback: function(value) {
+                                    return 'KES ' + value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#333'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Predictions Chart
+            const predCtx = document.getElementById('predictionChart').getContext('2d');
+            new Chart(predCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Predicted Expenses',
+                        data: [38000, 36000, 34000, 35000, 33000, 32000],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#333'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'KES ' + context.raw.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#333',
+                                callback: function(value) {
+                                    return 'KES ' + value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#333'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Refresh data function
+        function refreshData() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            // Simulate data refresh
+            alert(`Refreshing data from ${startDate} to ${endDate}`);
+            
+            // In a real app, you would fetch new data from API
+            // and update the charts and KPI values
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    </script>
 </body>
 </html>
