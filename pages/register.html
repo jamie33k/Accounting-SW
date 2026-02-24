@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - AccuFlow</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .auth-body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-header .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .auth-header h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .auth-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .form-group label i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group input.error {
+            border-color: #f44336;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .password-requirements {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+        
+        .requirement {
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .requirement i {
+            width: 16px;
+        }
+        
+        .requirement.valid {
+            color: #4caf50;
+        }
+        
+        .requirement.invalid {
+            color: #f44336;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+            color: #666;
+        }
+        
+        .auth-footer a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-home:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .phone-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .country-code {
+            width: 100px;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <a href="../index.html" class="back-home">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo" onclick="window.location.href='../index.html'">AccuFlow</div>
+                <h2>Create Account</h2>
+                <p>Join thousands of businesses using AccuFlow</p>
+            </div>
+            
+            <div id="alertContainer"></div>
+            
+            <form id="registerForm">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Full Name *</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                
+                <!-- Email -->
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email Address *</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Phone Number *</label>
+                    <div class="phone-input">
+                        <select class="country-code" id="countryCode">
+                            <option value="+1">+1 (US)</option>
+                            <option value="+44">+44 (UK)</option>
+                            <option value="+254" selected>+254 (KE)</option>
+                            <option value="+256">+256 (UG)</option>
+                            <option value="+255">+255 (TZ)</option>
+                            <option value="+250">+250 (RW)</option>
+                        </select>
+                        <input type="tel" id="phone" placeholder="712345678" pattern="[0-9]{9}" maxlength="9" required onkeypress="return onlyNumbers(event)">
+                    </div>
+                    <small style="color: #666; margin-top: 5px; display: block;">Enter 9 digits only</small>
+                </div>
+                
+                <!-- Password -->
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password *</label>
+                    <input type="password" id="password" placeholder="Create a password" required>
+                </div>
+                
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Confirm Password *</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                
+                <!-- Password Requirements -->
+                <div class="password-requirements" id="passwordRequirements">
+                    <div class="requirement" id="lengthReq">
+                        <i class="fas fa-circle"></i> At least 8 characters
+                    </div>
+                    <div class="requirement" id="uppercaseReq">
+                        <i class="fas fa-circle"></i> At least one uppercase letter
+                    </div>
+                    <div class="requirement" id="lowercaseReq">
+                        <i class="fas fa-circle"></i> At least one lowercase letter
+                    </div>
+                    <div class="requirement" id="numberReq">
+                        <i class="fas fa-circle"></i> At least one number
+                    </div>
+                    <div class="requirement" id="matchReq">
+                        <i class="fas fa-circle"></i> Passwords match
+                    </div>
+                </div>
+                
+                <!-- Terms and Conditions -->
+                <div style="margin: 20px 0;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="terms" required>
+                        <span style="color: #666; font-size: 14px;">
+                            I agree to the <a href="#" style="color: #667eea;">Terms of Service</a> and <a href="#" style="color: #667eea;">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="registerButton">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Allow only numbers in phone field
+        function onlyNumbers(event) {
+            var charCode = (event.which) ? event.which : event.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
+        // Password validation
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        
+        function validatePassword() {
+            const value = password.value;
+            
+            // Length check
+            const lengthReq = document.getElementById('lengthReq');
+            if (value.length >= 8) {
+                lengthReq.className = 'requirement valid';
+                lengthReq.innerHTML = '<i class="fas fa-check-circle"></i> At least 8 characters';
+            } else {
+                lengthReq.className = 'requirement invalid';
+                lengthReq.innerHTML = '<i class="fas fa-times-circle"></i> At least 8 characters';
+            }
+            
+            // Uppercase check
+            const uppercaseReq = document.getElementById('uppercaseReq');
+            if (/[A-Z]/.test(value)) {
+                uppercaseReq.className = 'requirement valid';
+                uppercaseReq.innerHTML = '<i class="fas fa-check-circle"></i> At least one uppercase letter';
+            } else {
+                uppercaseReq.className = 'requirement invalid';
+                uppercaseReq.innerHTML = '<i class="fas fa-times-circle"></i> At least one uppercase letter';
+            }
+            
+            // Lowercase check
+            const lowercaseReq = document.getElementById('lowercaseReq');
+            if (/[a-z]/.test(value)) {
+                lowercaseReq.className = 'requirement valid';
+                lowercaseReq.innerHTML = '<i class="fas fa-check-circle"></i> At least one lowercase letter';
+            } else {
+                lowercaseReq.className = 'requirement invalid';
+                lowercaseReq.innerHTML = '<i class="fas fa-times-circle"></i> At least one lowercase letter';
+            }
+            
+            // Number check
+            const numberReq = document.getElementById('numberReq');
+            if (/[0-9]/.test(value)) {
+                numberReq.className = 'requirement valid';
+                numberReq.innerHTML = '<i class="fas fa-check-circle"></i> At least one number';
+            } else {
+                numberReq.className = 'requirement invalid';
+                numberReq.innerHTML = '<i class="fas fa-times-circle"></i> At least one number';
+            }
+            
+            // Match check
+            const matchReq = document.getElementById('matchReq');
+            if (value && value === confirmPassword.value) {
+                matchReq.className = 'requirement valid';
+                matchReq.innerHTML = '<i class="fas fa-check-circle"></i> Passwords match';
+            } else {
+                matchReq.className = 'requirement invalid';
+                matchReq.innerHTML = '<i class="fas fa-times-circle"></i> Passwords match';
+            }
+        }
+        
+        password.addEventListener('input', validatePassword);
+        confirmPassword.addEventListener('input', validatePassword);
+
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const countryCode = document.getElementById('countryCode').value;
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
+            
+            const button = document.getElementById('registerButton');
+            
+            // Validation
+            if (!fullName || !email || !phone || !password) {
+                showAlert('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Validate phone (exactly 9 digits)
+            if (!/^\d{9}$/.test(phone)) {
+                showAlert('Phone number must be exactly 9 digits', 'error');
+                return;
+            }
+            
+            // Validate password
+            if (password.length < 8) {
+                showAlert('Password must be at least 8 characters', 'error');
+                return;
+            }
+            
+            if (!/[A-Z]/.test(password)) {
+                showAlert('Password must contain at least one uppercase letter', 'error');
+                return;
+            }
+            
+            if (!/[a-z]/.test(password)) {
+                showAlert('Password must contain at least one lowercase letter', 'error');
+                return;
+            }
+            
+            if (!/[0-9]/.test(password)) {
+                showAlert('Password must contain at least one number', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (!terms) {
+                showAlert('Please agree to the Terms of Service', 'error');
+                return;
+            }
+            
+            // Show loading
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            
+            try {
+                // Combine country code and phone
+                const fullPhone = countryCode + phone;
+                
+                // Send to server
+                const response = await fetch('/accounting-app/api/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullName: fullName,
+                        email: email,
+                        phone: fullPhone,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Account created successfully! Redirecting to login...', 'success');
+                    
+                    // Clear form
+                    document.getElementById('registerForm').reset();
+                    
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Registration failed');
+                }
+                
+            } catch (error) {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                showAlert(error.message, 'error');
+            }
+        });
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

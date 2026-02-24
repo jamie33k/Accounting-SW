@@ -266,4 +266,124 @@ function getJobCosts($db, $jobId) {
     $laborSql = "SELECT 
                 SUM(t.HoursWorked * e.PayRate) as regular_labor,
                 SUM(t.OvertimeHours * e.PayRate * 1.5) as overtime_labor,
-               
+                SUM(t.HoursWorked) as total_hours,
+                SUM(t.OvertimeHours) as total_overtime,
+                AVG(e.PayRate) as avg_rate
+                FROM timesheet t
+                JOIN employee e ON t.EmployeeID = e.EmployeeID
+                WHERE t.JobID = ? AND t.status = 'Approved'";
+    
+    $labor = $db->select($laborSql, [$jobId]);
+    
+    // Get material costs from line items
+    $materialSql = "SELECT 
+                   SUM(li.Amount) as materials,
+                   COUNT(DISTINCT li.InvoiceID) as invoice_count
+                   FROM line_item li
+                   JOIN invoice i ON li.InvoiceID = i.InvoiceID
+                   WHERE i.JobID = ? AND li.CostCode = 'Materials'";
+    
+    $material = $db->select($materialSql, [$jobId]);
+    
+    // Get equipment costs
+    $equipmentSql = "SELECT SUM(li.Amount) as equipment
+                    FROM line_item li
+                    JOIN invoice i ON li.InvoiceID = i.InvoiceID
+                    WHERE i.JobID = ? AND li.CostCode = 'Equipment'";
+    
+    $equipment = $db->select($equipmentSql, [$jobId]);
+    
+    // Get subcontractor costs
+    $subSql = "SELECT SUM(li.Amount) as subcontractors
+              FROM line_item li
+              JOIN invoice i ON li.InvoiceID = i.InvoiceID
+              WHERE i.JobID = ? AND li.CostCode = 'Subcontractor'";
+    
+    $subcontractors = $db->select($subSql, [$jobId]);
+    
+    $result = [
+        'labor' => $labor[0]['regular_labor'] ?? 0,
+        'overtime_labor' => $labor[0]['overtime_labor'] ?? 0,
+        'total_labor' => ($labor[0]['regular_labor'] ?? 0) + ($labor[0]['overtime_labor'] ?? 0),
+        'materials' => $material[0]['materials'] ?? 0,
+        'equipment' => $equipment[0]['equipment'] ?? 0,
+        'subcontractors' => $subcontractors[0]['subcontractors'] ?? 0,
+        'total_hours' => $labor[0]['total_hours'] ?? 0,
+        'total_overtime' => $labor[0]['total_overtime'] ?? 0,
+        'avg_rate' => $labor[0]['avg_rate'] ?? 0,
+        'actual' => ($labor[0]['regular_labor'] ?? 0) + 
+                    ($labor[0]['overtime_labor'] ?? 0) + 
+                    ($material[0]['materials'] ?? 0) + 
+                    ($equipment[0]['equipment'] ?? 0) + 
+                    ($subcontractors[0]['subcontractors'] ?? 0)
+    ];
+    
+    echo json_encode([
+        'success' => true,
+        'data' => $result
+    ]);
+}
+
+function getJobProfitability($db, $jobId) {
+    if (!$jobId) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Job ID required']);
+        return;
+    }
+    
+    // Get job details
+    $job = $db->select("SELECT * FROM job WHERE JobID = ?", [$jobId]);
+    if (empty($job)) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Job not found']);
+        return;
+    }
+    
+    // Get costs
+    $costs = getJobCosts($db, $jobId);
+    $costsData = json_decode($costs, true);
+    
+    // Get revenue
+    $revenueSql = "SELECT 
+                  SUM(TotalAmount) as total_revenue,
+                  SUM(CASE WHEN Status = 'Paid' THEN TotalAmount ELSE 0 END) as paid_revenue,
+                  SUM(CASE WHEN Status != 'Paid' THEN AmountDue ELSE 0 END) as outstanding
+                  FROM invoice
+                  WHERE JobID = ?";
+    
+    $revenue = $db->select($revenueSql, [$jobId]);
+    
+    $budget = $job[0]['BudgetTotal'] ?? 0;
+    $actualCost = $costsData['data']['actual'] ?? 0;
+    $revenue_amount = $revenue[0]['total_revenue'] ?? 0;
+    $profit = $revenue_amount - $actualCost;
+    $margin = $revenue_amount > 0 ? ($profit / $revenue_amount * 100) : 0;
+    
+    $result = [
+        'job_id' => $jobId,
+        'job_name' => $job[0]['JobName'],
+        'budget' => $budget,
+        'actual_cost' => $actualCost,
+        'variance' => $budget - $actualCost,
+        'variance_percentage' => $budget > 0 ? (($budget - $actualCost) / $budget * 100) : 0,
+        'revenue' => $revenue_amount,
+        'paid_revenue' => $revenue[0]['paid_revenue'] ?? 0,
+        'outstanding' => $revenue[0]['outstanding'] ?? 0,
+        'profit' => $profit,
+        'margin' => $margin
+    ];
+    
+    echo json_encode([
+        'success' => true,
+        'data' => $result
+    ]);
+}
+
+function logActivity($userId, $action, $details) {
+    global $db;
+    $sql = "INSERT INTO activity_log (user_id, action, details, ip_address, created_at) 
+            VALUES (?, ?, ?, ?, NOW())";
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    $db->insert($sql, [$userId, $action, $details, $ip]);
+}
+?>             

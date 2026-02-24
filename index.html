@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AccuFlow - Accounting Software for Growing Businesses</title>
+    <title>AccuFlow - Accounting Solutions for Growing Businesses</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -463,11 +463,11 @@
 </head>
 <body>
     <div class="landing-page">
-        <!-- Navigation with new logo -->
+        <!-- Navigation with new logo and correct paths -->
         <nav class="navbar">
             <div class="nav-container">
                 <!-- New Logo -->
-                <div class="logo" onclick="window.location.href='index.html'">
+                <div class="logo" onclick="window.location.href='/Accounting-SW/index.html'">
                     <span class="logo-icon">📊</span>
                     <span class="logo-text">Accu<span class="logo-highlight">Flow</span></span>
                 </div>
@@ -479,10 +479,12 @@
                     <a href="#customers">Customers</a>
                     <a href="#resources">Resources</a>
                     <div class="nav-buttons">
-                        <button class="btn-outline" onclick="window.location.href='pages/login.html'">
+                        <!-- Sign In button with correct path -->
+                        <button class="btn-outline" onclick="window.location.href='/Accounting-SW/pages/login.html'">
                             <i class="fas fa-sign-in-alt"></i> Sign In
                         </button>
-                        <button class="btn-primary" onclick="window.location.href='pages/register.html'">
+                        <!-- Sign Up button with correct path -->
+                        <button class="btn-primary" onclick="window.location.href='/Accounting-SW/pages/register.html'">
                             <i class="fas fa-user-plus"></i> Sign Up Now
                         </button>
                     </div>
@@ -490,19 +492,19 @@
             </div>
         </nav>
 
-        <!-- Hero Section - Background stretches edge-to-edge -->
+        <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
                 <span class="hero-badge">KRA-Approved eTIMS Integrator</span>
-                <h1>Comprehensive Accounting Solutions for Growing Businesses</h1>
-                <p>eTIMS-compliant accounting software that helps you send invoices, track inventory, manage cash flow, and file VAT returns to KRA.</p>
-                <button class="cta-button" onclick="window.location.href='pages/register.html'">
+                <h1>Comprehensive accounting solutions for growing businesses</h1>
+                <p>eTIMS-compliant accounting solutions that helps you send invoices, track inventory, manage cash flow, and file VAT returns to KRA.</p>
+                <button class="cta-button" onclick="window.location.href='/Accounting-SW/pages/register.html'">
                     Get Started <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
         </section>
 
-        <!-- Spotlight Section - Now with transparent background -->
+        <!-- Spotlight Section -->
         <section id="features" class="features">
             <div class="features-container">
                 <span class="hero-badge" style="background: rgba(102, 126, 234, 0.3); color: white; border: 1px solid rgba(255,255,255,0.3);">SPOTLIGHT</span>
@@ -562,21 +564,21 @@
             </div>
         </section>
 
-        <!-- Pricing Section - Now with transparent background -->
+        <!-- Pricing Section -->
         <section id="pricing" class="features">
             <div class="features-container">
                 <h2 class="section-title">Simple, Transparent Pricing</h2>
                 <p class="section-subtitle">Choose the plan that fits your business</p>
                 <div style="text-align: center; padding: 40px;">
                     <p style="font-size: 18px; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">Contact sales for custom pricing tailored to your needs.</p>
-                    <button class="btn-primary" style="margin-top: 20px; padding: 15px 40px;" onclick="window.location.href='pages/contact.html'">
+                    <button class="btn-primary" style="margin-top: 20px; padding: 15px 40px;" onclick="window.location.href='/Accounting-SW/pages/contact.html'">
                         Contact Sales
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- Solutions Section - Now with transparent background -->
+        <!-- Solutions Section -->
         <section id="solutions" class="features">
             <div class="features-container">
                 <h2 class="section-title">Solutions for Every Business</h2>
@@ -619,11 +621,35 @@
 
         // Make logo clickable
         document.querySelector('.logo').addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.location.href = '/Accounting-SW/index.html';
         });
+
+        // Debug function to check if files exist
+        async function checkFileExists(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                console.log(`${url}: ${response.ok ? '✅ Found' : '❌ Not Found'}`);
+                return response.ok;
+            } catch (error) {
+                console.log(`${url}: ❌ Error checking`);
+                return false;
+            }
+        }
+
+        // Check if login page exists (run in console)
+        window.checkPaths = function() {
+            console.log('Checking file paths:');
+            checkFileExists('/Accounting-SW/pages/login.html');
+            checkFileExists('/Accounting-SW/pages/register.html');
+            checkFileExists('/Accounting-SW/api/login.php');
+            checkFileExists('/Accounting-SW/api/register.php');
+        };
+
+        // Run check automatically on page load
+        setTimeout(() => {
+            console.log('🔍 Running path check...');
+            window.checkPaths();
+        }, 1000);
     </script>
 </body>
 </html>
