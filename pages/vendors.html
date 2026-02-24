@@ -5,17 +5,728 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendors - AccuFlow</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 5px;
+        }
+
+        .sidebar .logo {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .sidebar .logo-icon {
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sidebar .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .sidebar .logo-highlight {
+            color: #667eea;
+            font-weight: 800;
+        }
+
+        .sidebar .nav-menu {
+            padding: 20px;
+        }
+
+        .sidebar .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #333;
+            border-radius: 12px;
+            margin-bottom: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-item i {
+            width: 20px;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        .sidebar .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-item.active {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            border-left: 3px solid #667eea;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info i {
+            font-size: 32px;
+            color: #667eea;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            display: block;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #666;
+            display: block;
+        }
+
+        .logout-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn:hover {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            margin: 0;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        /* Insurance Alert */
+        .insurance-alert {
+            background: rgba(243, 156, 18, 0.15);
+            border-left: 4px solid #f39c12;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #b45309;
+            font-weight: 500;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .insurance-alert i {
+            font-size: 20px;
+            color: #f39c12;
+        }
+
+        .insurance-alert button {
+            margin-left: auto;
+            background: rgba(243, 156, 18, 0.2);
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            color: #b45309;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .insurance-alert button:hover {
+            background: rgba(243, 156, 18, 0.3);
+        }
+
+        /* Filters Bar */
+        .filters-bar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-options select {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+            min-width: 180px;
+            cursor: pointer;
+        }
+
+        /* Table Container */
+        .table-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: rgba(102, 126, 234, 0.15);
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #333;
+            font-size: 14px;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Status Badges */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: rgba(76, 175, 80, 0.15);
+            color: #2e7d32;
+        }
+
+        .badge-warning {
+            background: rgba(243, 156, 18, 0.15);
+            color: #b45309;
+        }
+
+        .badge-danger {
+            background: rgba(244, 67, 54, 0.15);
+            color: #c62828;
+        }
+
+        .badge-info {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .badge-primary {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .badge-secondary {
+            background: rgba(108, 117, 125, 0.15);
+            color: #6c757d;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.transactions:hover {
+            background: #4caf50;
+        }
+
+        .action-btn.delete:hover {
+            background: #f44336;
+        }
+
+        /* Insurance Status Indicators */
+        .insurance-status {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .insurance-status.valid {
+            color: #2e7d32;
+        }
+
+        .insurance-status.warning {
+            color: #b45309;
+        }
+
+        .insurance-status.expired {
+            color: #c62828;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+
+        .close {
+            font-size: 28px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #f44336;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox input {
+            width: auto;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        /* Transaction List */
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-options {
+                width: 100%;
+            }
+
+            .filter-options select {
+                width: 100%;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .data-table {
+                min-width: 900px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-calculator"></i>
-                <span>AccuFlow</span>
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo" onclick="window.location.href='dashboard.html'">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">Accu<span class="logo-highlight">Flow</span></span>
             </div>
             
             <nav class="nav-menu">
@@ -52,7 +763,10 @@
             <div class="sidebar-footer">
                 <div class="user-info">
                     <i class="fas fa-user-circle"></i>
-                    <span id="userName">Loading...</span>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Admin User</span>
+                        <span class="user-role" id="userRole">Administrator</span>
+                    </div>
                 </div>
                 <button class="logout-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
@@ -68,26 +782,33 @@
                     <i class="fas fa-plus"></i> Add Vendor
                 </button>
             </header>
+
+            <!-- Insurance Alert (shown when insurance expiring) -->
+            <div id="insuranceAlert" class="insurance-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span><strong>3 vendors</strong> have insurance expiring within 30 days</span>
+                <button onclick="viewExpiringInsurance()">View Details</button>
+            </div>
             
             <!-- Filters -->
             <div class="filters-bar">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search vendors..." onkeyup="filterVendors()">
+                    <input type="text" id="searchInput" placeholder="Search vendors by name, tax ID...">
                 </div>
                 <div class="filter-options">
-                    <select id="subcontractorFilter" onchange="filterVendors()">
+                    <select id="subcontractorFilter">
                         <option value="">All Vendors</option>
                         <option value="1">Subcontractors Only</option>
                         <option value="0">Non-Subcontractors</option>
                     </select>
+                    <select id="insuranceFilter">
+                        <option value="">All Insurance Status</option>
+                        <option value="valid">Valid</option>
+                        <option value="expiring">Expiring Soon</option>
+                        <option value="expired">Expired</option>
+                    </select>
                 </div>
-            </div>
-            
-            <!-- Insurance Alert -->
-            <div id="insuranceAlert" class="alert alert-warning" style="display: none;">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>Some vendors have insurance expiring soon!</span>
             </div>
             
             <!-- Vendors Table -->
@@ -96,24 +817,143 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Vendor Name</th>
                             <th>Tax ID</th>
-                            <th>Subcontractor</th>
+                            <th>Type</th>
                             <th>Insurance Expiry</th>
                             <th>Status</th>
+                            <th>Total Spent (KES)</th>
+                            <th>Last Transaction</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="vendorsTableBody">
                         <tr>
-                            <td colspan="7" class="text-center">Loading vendors...</td>
+                            <td>1</td>
+                            <td><strong>ABC Supplies Ltd</strong></td>
+                            <td>12345678</td>
+                            <td><span class="badge badge-secondary">Vendor</span></td>
+                            <td>15 Jun 2026</td>
+                            <td><span class="badge badge-success">Valid</span></td>
+                            <td>KES 450,000</td>
+                            <td>15 Mar 2026</td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editVendor(1)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewVendor(1)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn transactions" onclick="viewVendorTransactions(1)" title="Transactions">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteVendor(1)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>XYZ Construction</strong></td>
+                            <td>87654321</td>
+                            <td><span class="badge badge-primary">Subcontractor</span></td>
+                            <td>10 Apr 2026</td>
+                            <td><span class="badge badge-warning">Expiring Soon</span></td>
+                            <td>KES 1,250,000</td>
+                            <td>10 Mar 2026</td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editVendor(2)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewVendor(2)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn transactions" onclick="viewVendorTransactions(2)" title="Transactions">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteVendor(2)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Kenya Hardware</strong></td>
+                            <td>55667788</td>
+                            <td><span class="badge badge-secondary">Vendor</span></td>
+                            <td>30 May 2026</td>
+                            <td><span class="badge badge-success">Valid</span></td>
+                            <td>KES 780,000</td>
+                            <td>05 Mar 2026</td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editVendor(3)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewVendor(3)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn transactions" onclick="viewVendorTransactions(3)" title="Transactions">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteVendor(3)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>Nationwide Electric</strong></td>
+                            <td>99887766</td>
+                            <td><span class="badge badge-primary">Subcontractor</span></td>
+                            <td>01 Mar 2026</td>
+                            <td><span class="badge badge-danger">Expired</span></td>
+                            <td>KES 320,000</td>
+                            <td>20 Feb 2026</td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editVendor(4)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewVendor(4)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn transactions" onclick="viewVendorTransactions(4)" title="Transactions">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteVendor(4)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>Coast Builders</strong></td>
+                            <td>44556677</td>
+                            <td><span class="badge badge-primary">Subcontractor</span></td>
+                            <td>20 Jul 2026</td>
+                            <td><span class="badge badge-success">Valid</span></td>
+                            <td>KES 2,100,000</td>
+                            <td>12 Mar 2026</td>
+                            <td class="actions">
+                                <button class="action-btn" onclick="editVendor(5)" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="viewVendor(5)" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn transactions" onclick="viewVendorTransactions(5)" title="Transactions">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteVendor(5)" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
-    
+
     <!-- Add/Edit Vendor Modal -->
     <div id="vendorModal" class="modal">
         <div class="modal-content">
@@ -125,13 +965,13 @@
                 <input type="hidden" id="vendorId">
                 
                 <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" id="name" required>
+                    <label><i class="fas fa-building"></i> Vendor Name</label>
+                    <input type="text" id="vendorName" placeholder="Enter vendor name" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="taxId">Tax ID</label>
-                    <input type="text" id="taxId">
+                    <label><i class="fas fa-id-card"></i> Tax ID / PIN</label>
+                    <input type="text" id="taxId" placeholder="Enter tax ID / PIN">
                 </div>
                 
                 <div class="form-group">
@@ -142,38 +982,309 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="insuranceExpiry">Insurance Expiry</label>
+                    <label><i class="fas fa-calendar"></i> Insurance Expiry Date</label>
                     <input type="date" id="insuranceExpiry">
                 </div>
                 
                 <div class="modal-footer">
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="submit" class="btn-primary">Save Vendor</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
+    <!-- View Vendor Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Vendor Details</h2>
+                <span class="close" onclick="closeViewModal()">&times;</span>
+            </div>
+            <div id="viewDetails" style="padding: 20px;">
+                <!-- Details will be populated by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions Modal -->
+    <div id="transactionsModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Vendor Transactions</h2>
+                <span class="close" onclick="closeTransactionsModal()">&times;</span>
+            </div>
+            <div id="transactionsList" class="transaction-list" style="padding: 20px;">
+                <!-- Transactions will be populated by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeTransactionsModal()">Close</button>
+                <button class="btn-primary" onclick="exportTransactions()">Export</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal">
-        <div class="modal-content modal-small">
+        <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
                 <h2>Confirm Delete</h2>
                 <span class="close" onclick="closeDeleteModal()">&times;</span>
             </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this vendor?</p>
-                <p class="warning">This action cannot be undone.</p>
+            <div style="text-align: center; padding: 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #f44336; margin-bottom: 15px;"></i>
+                <p style="margin-bottom: 20px; color: #333;">Are you sure you want to delete this vendor?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-                <button type="button" class="btn-danger" onclick="confirmDelete()">Delete</button>
+                <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Delete</button>
             </div>
         </div>
     </div>
-    
-    <script src="../assets/js/api.js"></script>
-    <script src="../assets/js/auth.js"></script>
-    <script src="../assets/js/vendors.js"></script>
+
+    <script>
+        let currentVendorId = null;
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Get user info
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.fullName) {
+                document.getElementById('userName').textContent = user.fullName;
+            }
+            if (user.role) {
+                document.getElementById('userRole').textContent = 
+                    user.role.charAt(0).toUpperCase() + user.role.slice(1);
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchValue = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#vendorsTable tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchValue) ? '' : 'none';
+            });
+        });
+
+        // Filter by subcontractor and insurance status
+        document.getElementById('subcontractorFilter').addEventListener('change', filterVendors);
+        document.getElementById('insuranceFilter').addEventListener('change', filterVendors);
+
+        function filterVendors() {
+            const subFilter = document.getElementById('subcontractorFilter').value;
+            const insuranceFilter = document.getElementById('insuranceFilter').value;
+            const tableRows = document.querySelectorAll('#vendorsTable tbody tr');
+            
+            tableRows.forEach(row => {
+                let showRow = true;
+                
+                if (subFilter !== '') {
+                    const typeCell = row.querySelector('td:nth-child(4) .badge');
+                    const isSub = typeCell ? typeCell.textContent === 'Subcontractor' : false;
+                    if ((subFilter === '1' && !isSub) || (subFilter === '0' && isSub)) {
+                        showRow = false;
+                    }
+                }
+                
+                if (insuranceFilter && showRow) {
+                    const statusCell = row.querySelector('td:nth-child(6) .badge');
+                    const status = statusCell ? statusCell.textContent.toLowerCase() : '';
+                    
+                    if (insuranceFilter === 'valid' && status !== 'valid') showRow = false;
+                    if (insuranceFilter === 'expiring' && status !== 'expiring soon') showRow = false;
+                    if (insuranceFilter === 'expired' && status !== 'expired') showRow = false;
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // Modal functions
+        function openAddVendorModal() {
+            document.getElementById('modalTitle').textContent = 'Add Vendor';
+            document.getElementById('vendorId').value = '';
+            document.getElementById('vendorName').value = '';
+            document.getElementById('taxId').value = '';
+            document.getElementById('isSubcontractor').checked = false;
+            document.getElementById('insuranceExpiry').value = '';
+            document.getElementById('vendorModal').classList.add('show');
+        }
+
+        function editVendor(id) {
+            currentVendorId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Vendor';
+            document.getElementById('vendorId').value = id;
+            
+            // Populate with sample data
+            if (id === 1) {
+                document.getElementById('vendorName').value = 'ABC Supplies Ltd';
+                document.getElementById('taxId').value = '12345678';
+                document.getElementById('isSubcontractor').checked = false;
+                document.getElementById('insuranceExpiry').value = '2026-06-15';
+            } else if (id === 2) {
+                document.getElementById('vendorName').value = 'XYZ Construction';
+                document.getElementById('taxId').value = '87654321';
+                document.getElementById('isSubcontractor').checked = true;
+                document.getElementById('insuranceExpiry').value = '2026-04-10';
+            } else if (id === 3) {
+                document.getElementById('vendorName').value = 'Kenya Hardware';
+                document.getElementById('taxId').value = '55667788';
+                document.getElementById('isSubcontractor').checked = false;
+                document.getElementById('insuranceExpiry').value = '2026-05-30';
+            }
+            
+            document.getElementById('vendorModal').classList.add('show');
+        }
+
+        function viewVendor(id) {
+            const viewDetails = document.getElementById('viewDetails');
+            
+            let details = '';
+            if (id === 1) {
+                details = `
+                    <div style="margin-bottom: 15px;"><strong>ID:</strong> 1</div>
+                    <div style="margin-bottom: 15px;"><strong>Name:</strong> ABC Supplies Ltd</div>
+                    <div style="margin-bottom: 15px;"><strong>Tax ID:</strong> 12345678</div>
+                    <div style="margin-bottom: 15px;"><strong>Type:</strong> Vendor</div>
+                    <div style="margin-bottom: 15px;"><strong>Insurance Expiry:</strong> 15 Jun 2026</div>
+                    <div style="margin-bottom: 15px;"><strong>Status:</strong> <span class="badge badge-success">Valid</span></div>
+                    <div style="margin-bottom: 15px;"><strong>Total Spent:</strong> KES 450,000</div>
+                    <div style="margin-bottom: 15px;"><strong>Last Transaction:</strong> 15 Mar 2026</div>
+                    <div style="margin-bottom: 15px;"><strong>Transaction Count:</strong> 12</div>
+                `;
+            } else if (id === 2) {
+                details = `
+                    <div style="margin-bottom: 15px;"><strong>ID:</strong> 2</div>
+                    <div style="margin-bottom: 15px;"><strong>Name:</strong> XYZ Construction</div>
+                    <div style="margin-bottom: 15px;"><strong>Tax ID:</strong> 87654321</div>
+                    <div style="margin-bottom: 15px;"><strong>Type:</strong> Subcontractor</div>
+                    <div style="margin-bottom: 15px;"><strong>Insurance Expiry:</strong> 10 Apr 2026</div>
+                    <div style="margin-bottom: 15px;"><strong>Status:</strong> <span class="badge badge-warning">Expiring Soon</span></div>
+                    <div style="margin-bottom: 15px;"><strong>Total Spent:</strong> KES 1,250,000</div>
+                    <div style="margin-bottom: 15px;"><strong>Last Transaction:</strong> 10 Mar 2026</div>
+                    <div style="margin-bottom: 15px;"><strong>Transaction Count:</strong> 24</div>
+                `;
+            }
+            
+            viewDetails.innerHTML = details;
+            document.getElementById('viewModal').classList.add('show');
+        }
+
+        function viewVendorTransactions(id) {
+            const transactionsList = document.getElementById('transactionsList');
+            
+            let transactions = '';
+            if (id === 1) {
+                transactions = `
+                    <div class="transaction-item">
+                        <div>
+                            <div><strong>Invoice #INV-2026-001</strong></div>
+                            <div class="transaction-date">15 Mar 2026</div>
+                        </div>
+                        <div class="transaction-amount">KES 45,000</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div>
+                            <div><strong>Invoice #INV-2026-002</strong></div>
+                            <div class="transaction-date">10 Mar 2026</div>
+                        </div>
+                        <div class="transaction-amount">KES 32,500</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div>
+                            <div><strong>Invoice #INV-2026-003</strong></div>
+                            <div class="transaction-date">05 Mar 2026</div>
+                        </div>
+                        <div class="transaction-amount">KES 28,000</div>
+                    </div>
+                `;
+            } else if (id === 2) {
+                transactions = `
+                    <div class="transaction-item">
+                        <div>
+                            <div><strong>Invoice #INV-2026-004</strong></div>
+                            <div class="transaction-date">10 Mar 2026</div>
+                        </div>
+                        <div class="transaction-amount">KES 156,000</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div>
+                            <div><strong>Invoice #INV-2026-005</strong></div>
+                            <div class="transaction-date">05 Mar 2026</div>
+                        </div>
+                        <div class="transaction-amount">KES 89,500</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div>
+                            <div><strong>Invoice #INV-2026-006</strong></div>
+                            <div class="transaction-date">28 Feb 2026</div>
+                        </div>
+                        <div class="transaction-amount">KES 124,000</div>
+                    </div>
+                `;
+            }
+            
+            transactionsList.innerHTML = transactions;
+            document.getElementById('transactionsModal').classList.add('show');
+        }
+
+        function deleteVendor(id) {
+            currentVendorId = id;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function viewExpiringInsurance() {
+            alert('Showing vendors with insurance expiring soon');
+            document.getElementById('insuranceFilter').value = 'expiring';
+            filterVendors();
+        }
+
+        function closeModal() {
+            document.getElementById('vendorModal').classList.remove('show');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('show');
+        }
+
+        function closeTransactionsModal() {
+            document.getElementById('transactionsModal').classList.remove('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        function saveVendor(event) {
+            event.preventDefault();
+            alert('Vendor saved successfully!');
+            closeModal();
+        }
+
+        function confirmDelete() {
+            alert('Vendor deleted successfully!');
+            closeDeleteModal();
+        }
+
+        function exportTransactions() {
+            alert('Exporting transactions...');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    </script>
 </body>
 </html>
