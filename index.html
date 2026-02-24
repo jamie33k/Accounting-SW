@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccuFlow - Accounting Software</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="landing-page">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-calculator"></i>
+                    <span>AccuFlow</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#about">About</a>
+                    <button class="btn-primary" onclick="window.location.href='pages/login.html'">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <header class="hero">
+            <div class="hero-content">
+                <h1>Smart Accounting with AI Predictions</h1>
+                <p>Manage your finances, track expenses, and get intelligent insights with our ML-powered accounting software</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary btn-large" onclick="window.location.href='pages/login.html'">
+                        Get Started <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn-secondary btn-large" onclick="window.location.href='#demo'">
+                        Watch Demo
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="assets/images/dashboard-preview.png" alt="Dashboard Preview">
+            </div>
+        </header>
+        
+        <section id="features" class="features">
+            <h2>Powerful Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>ML Predictions</h3>
+                    <p>AI-powered expense predictions and pattern recognition</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-file-invoice"></i>
+                    <h3>Invoice Management</h3>
+                    <p>Create, send, and track invoices with ease</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Real-time Reports</h3>
+                    <p>Comprehensive P&L, expense, and income reports</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Employee Management</h3>
+                    <p>Track timesheets and manage payroll</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

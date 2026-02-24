@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - AccuFlow</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <span>AccuFlow</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="employees.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Employees</span>
+                </a>
+                <a href="timesheets.html" class="nav-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Timesheets</span>
+                </a>
+                <a href="jobs.html" class="nav-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Jobs</span>
+                </a>
+                <a href="invoices.html" class="nav-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Invoices</span>
+                </a>
+                <a href="vendors.html" class="nav-item">
+                    <i class="fas fa-truck"></i>
+                    <span>Vendors</span>
+                </a>
+                <a href="reports.html" class="nav-item active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Loading...</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Reports & Analytics</h1>
+                <div class="report-actions">
+                    <button class="btn-secondary" onclick="exportToPDF()">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                    <button class="btn-secondary" onclick="exportToExcel()">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Report Tabs -->
+            <div class="report-tabs">
+                <button class="tab-btn active" onclick="switchTab('pnl')">P&L</button>
+                <button class="tab-btn" onclick="switchTab('expenses')">Expenses</button>
+                <button class="tab-btn" onclick="switchTab('income')">Income</button>
+                <button class="tab-btn" onclick="switchTab('ml')">ML Insights</button>
+            </div>
+            
+            <!-- P&L Report Tab -->
+            <div id="pnlTab" class="tab-content active">
+                <div class="report-filters">
+                    <select id="pnlYear" onchange="loadPNLReport()">
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+                
+                <div class="report-summary">
+                    <div class="summary-card">
+                        <h3>Total Income</h3>
+                        <p class="summary-value" id="pnlTotalIncome">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Expenses</h3>
+                        <p class="summary-value" id="pnlTotalExpenses">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Net Profit</h3>
+                        <p class="summary-value" id="pnlNetProfit">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Profit Margin</h3>
+                        <p class="summary-value" id="pnlProfitMargin">0%</p>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="pnlChart"></canvas>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table" id="pnlTable">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Income</th>
+                                <th>Expenses</th>
+                                <th>Profit</th>
+                                <th>Margin</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pnlTableBody">
+                            <tr>
+                                <td colspan="5" class="text-center">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Expenses Report Tab -->
+            <div id="expensesTab" class="tab-content">
+                <div class="report-filters">
+                    <input type="date" id="expenseStartDate">
+                    <span>to</span>
+                    <input type="date" id="expenseEndDate">
+                    <select id="expenseCategory">
+                        <option value="">All Categories</option>
+                        <option value="Materials">Materials</option>
+                        <option value="Labor">Labor</option>
+                        <option value="Equipment">Equipment</option>
+                        <option value="Subcontractor">Subcontractor</option>
+                    </select>
+                    <button class="btn-primary" onclick="loadExpenseReport()">Apply</button>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table" id="expensesTable">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Job</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expensesTableBody">
+                            <tr>
+                                <td colspan="4" class="text-center">Select filters to load data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Income Report Tab -->
+            <div id="incomeTab" class="tab-content">
+                <div class="report-filters">
+                    <input type="date" id="incomeStartDate">
+                    <span>to</span>
+                    <input type="date" id="incomeEndDate">
+                    <select id="incomeStatus">
+                        <option value="">All Status</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Sent">Sent</option>
+                        <option value="Partial">Partial</option>
+                    </select>
+                    <button class="btn-primary" onclick="loadIncomeReport()">Apply</button>
+                </div>
+                
+                <div class="report-summary">
+                    <div class="summary-card">
+                        <h3>Total Invoiced</h3>
+                        <p class="summary-value" id="incomeTotalInvoiced">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Paid</h3>
+                        <p class="summary-value" id="incomeTotalPaid">$0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Due</h3>
+                        <p class="summary-value" id="incomeTotalDue">$0</p>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table" id="incomeTable">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Job</th>
+                                <th>Client</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="incomeTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">Select filters to load data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- ML Insights Tab -->
+            <div id="mlTab" class="tab-content">
+                <div class="ml-header">
+                    <h2><i class="fas fa-robot"></i> AI-Powered Insights</h2>
+                    <button class="btn-secondary" onclick="refreshMLInsights()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="ml-predictions">
+                    <div class="prediction-card">
+                        <h3>Next Month Prediction</h3>
+                        <div class="prediction-value" id="nextMonthPrediction">Loading...</div>
+                        <div class="confidence" id="predictionConfidence"></div>
+                    </div>
+                    
+                    <div class="prediction-card">
+                        <h3>Seasonal Pattern</h3>
+                        <div id="seasonalPattern" class="pattern-text">Analyzing patterns...</div>
+                    </div>
+                    
+                    <div class="prediction-card">
+                        <h3>Trend Analysis</h3>
+                        <div id="trendAnalysis" class="trend-text">Calculating trends...</div>
+                    </div>
+                </div>
+                
+                <div class="insights-list" id="mlRecommendations">
+                    <!-- ML recommendations will be loaded here -->
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="mlChart"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/reports.js"></script>
+</body>
+</html>

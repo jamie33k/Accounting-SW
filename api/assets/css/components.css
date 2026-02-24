@@ -1,0 +1,519 @@
+/* assets/css/components.css */
+/* Reusable component styles */
+
+/* Date Range Picker */
+.date-range-picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 5px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--gray-300);
+}
+
+.date-range-picker input {
+    border: none;
+    padding: 8px;
+    outline: none;
+}
+
+/* File Upload */
+.file-upload {
+    position: relative;
+    display: inline-block;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--gray-200);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.file-upload-label:hover {
+    background: var(--gray-300);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pagination-item {
+    padding: 8px 12px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.pagination-item:hover {
+    background: var(--gray-200);
+}
+
+.pagination-item.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 200px;
+    background: white;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--box-shadow-lg);
+    display: none;
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 15px;
+    color: var(--gray-700);
+    transition: var(--transition);
+}
+
+.dropdown-item:hover {
+    background: var(--gray-100);
+}
+
+/* Progress Steps */
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background: var(--gray-300);
+    z-index: 1;
+}
+
+.step.completed:not(:last-child)::after {
+    background: var(--success-color);
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    background: var(--gray-300);
+    color: var(--gray-700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.step.completed .step-number {
+    background: var(--success-color);
+    color: white;
+}
+
+.step.active .step-number {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--gray-400);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Avatar */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.avatar-sm {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+}
+
+.avatar-lg {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+}
+
+.avatar-xl {
+    width: 100px;
+    height: 100px;
+    font-size: 36px;
+}
+
+/* Stats Card */
+.stat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--gray-600);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.stat-change {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Comment Box */
+.comment-box {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: var(--gray-100);
+    border-radius: var(--border-radius);
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-author {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.comment-text {
+    color: var(--gray-700);
+    margin-bottom: 5px;
+}
+
+.comment-time {
+    font-size: 11px;
+    color: var(--gray-500);
+}
+
+/* Price Card */
+.price-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.price-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.price-card.featured {
+    border: 2px solid var(--primary-color);
+    position: relative;
+}
+
+.price-card.featured::before {
+    content: 'Popular';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.price {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 20px 0;
+}
+
+.price-period {
+    font-size: 14px;
+    color: var(--gray-600);
+}
+
+/* Kanban Board */
+.kanban-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.kanban-column {
+    background: var(--gray-100);
+    border-radius: var(--border-radius);
+    padding: 15px;
+}
+
+.kanban-header {
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gray-300);
+}
+
+.kanban-card {
+    background: white;
+    border-radius: var(--border-radius-sm);
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: var(--box-shadow);
+    cursor: move;
+    transition: var(--transition);
+}
+
+.kanban-card:hover {
+    box-shadow: var(--box-shadow-lg);
+}
+
+.kanban-card.dragging {
+    opacity: 0.5;
+}
+
+/* Timeline */
+.horizontal-timeline {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+.timeline-item {
+    flex: 0 0 200px;
+    position: relative;
+    padding: 20px;
+    background: white;
+    border-radius: var(--border-radius);
+    margin-right: 20px;
+    box-shadow: var(--box-shadow);
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    width: 20px;
+    height: 2px;
+    background: var(--gray-400);
+}
+
+.timeline-item:last-child::after {
+    display: none;
+}
+
+/* Invoice Template */
+.invoice-template {
+    background: white;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--gray-300);
+}
+
+.invoice-logo {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.invoice-details {
+    text-align: right;
+}
+
+.invoice-title {
+    font-size: 24px;
+    color: var(--gray-700);
+    margin-bottom: 10px;
+}
+
+.invoice-info {
+    color: var(--gray-600);
+    margin-bottom: 5px;
+}
+
+/* Responsive Components */
+@media (max-width: 768px) {
+    .date-range-picker {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .progress-steps {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .step:not(:last-child)::after {
+        top: 40px;
+        right: auto;
+        left: 15px;
+        width: 2px;
+        height: 30px;
+    }
+    
+    .kanban-board {
+        grid-template-columns: 1fr;
+    }
+    
+    .horizontal-timeline {
+        flex-direction: column;
+    }
+    
+    .timeline-item {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    
+    .timeline-item::after {
+        top: auto;
+        bottom: -20px;
+        right: 50%;
+        width: 2px;
+        height: 20px;
+    }
+}
+
+/* Print Styles for Invoice */
+@media print {
+    .invoice-template {
+        box-shadow: none;
+        padding: 20px;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+}

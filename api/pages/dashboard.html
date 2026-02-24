@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AccuFlow</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <span>AccuFlow</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="employees.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Employees</span>
+                </a>
+                <a href="timesheets.html" class="nav-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Timesheets</span>
+                </a>
+                <a href="jobs.html" class="nav-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Jobs</span>
+                </a>
+                <a href="invoices.html" class="nav-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Invoices</span>
+                </a>
+                <a href="vendors.html" class="nav-item">
+                    <i class="fas fa-truck"></i>
+                    <span>Vendors</span>
+                </a>
+                <a href="reports.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Loading...</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Dashboard</h1>
+                <div class="date-range">
+                    <input type="date" id="startDate">
+                    <span>to</span>
+                    <input type="date" id="endDate">
+                    <button class="btn-primary" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i> Update
+                    </button>
+                </div>
+            </header>
+            
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon blue">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Total Income</h3>
+                        <p class="kpi-value" id="totalIncome">$0</p>
+                        <p class="kpi-trend positive">
+                            <i class="fas fa-arrow-up"></i> <span id="incomeTrend">0%</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-icon green">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Total Expenses</h3>
+                        <p class="kpi-value" id="totalExpenses">$0</p>
+                        <p class="kpi-trend negative">
+                            <i class="fas fa-arrow-down"></i> <span id="expenseTrend">0%</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-icon purple">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Net Profit</h3>
+                        <p class="kpi-value" id="netProfit">$0</p>
+                        <p class="kpi-trend" id="profitMargin">
+                            <span>Margin: 0%</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Due Invoices</h3>
+                        <p class="kpi-value" id="dueInvoices">0</p>
+                        <p class="kpi-trend">
+                            <span id="dueAmount">$0 due</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Income vs Expenses</h3>
+                        <select id="chartPeriod">
+                            <option value="6">Last 6 Months</option>
+                            <option value="12" selected>Last 12 Months</option>
+                            <option value="24">Last 24 Months</option>
+                        </select>
+                    </div>
+                    <canvas id="incomeExpenseChart"></canvas>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>ML Predictions</h3>
+                        <span class="badge ml-badge">AI Powered</span>
+                    </div>
+                    <canvas id="predictionChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- ML Insights and Recent Activity -->
+            <div class="insights-row">
+                <div class="insights-card">
+                    <h3><i class="fas fa-robot"></i> AI Insights</h3>
+                    <div class="insights-list" id="mlInsights">
+                        <div class="insight-item loading">Loading insights...</div>
+                    </div>
+                </div>
+                
+                <div class="recent-card">
+                    <h3>Recent Transactions</h3>
+                    <div class="recent-list" id="recentTransactions">
+                        <div class="recent-item loading">Loading transactions...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/dashboard.js"></script>
+</body>
+</html>
