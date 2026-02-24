@@ -15,7 +15,7 @@
             background-size: cover;
         }
         
-        /* Dark overlay to make text readable */
+        /* Dark overlay to make text readable - FIXED to cover entire screen */
         .landing-page::before {
             content: '';
             position: fixed;
@@ -34,7 +34,7 @@
             z-index: 1;
         }
         
-        /* Navbar with blur effect */
+        /* Navbar with blur effect - full width */
         .navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -45,12 +45,14 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            left: 0;
+            right: 0;
         }
         
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -121,21 +123,21 @@
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
-        /* Updated Hero Section - Centered, no graph */
+        /* FIXED Hero Section - No gap on right border */
         .hero {
-            padding: 180px 24px 100px;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 180px 40px 100px;
+            width: 100%;
             text-align: center;
         }
         
         .hero-content {
-            max-width: 700px;
+            max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
         }
         
         .hero-content h1 {
-            font-size: 52px;
+            font-size: 56px;
             line-height: 1.2;
             margin-bottom: 20px;
             color: white;
@@ -143,11 +145,14 @@
         }
         
         .hero-content p {
-            font-size: 18px;
+            font-size: 20px;
             color: rgba(255,255,255,0.95);
             margin-bottom: 30px;
             text-shadow: 0 1px 5px rgba(0,0,0,0.3);
             line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .hero-badge {
@@ -163,17 +168,20 @@
             border: 1px solid rgba(255,255,255,0.3);
         }
         
+        /* Features Section - Full width with centered content */
         .features {
-            padding: 80px 24px;
+            padding: 80px 40px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-top: 1px solid rgba(255,255,255,0.2);
             border-bottom: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
         }
         
         .features-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            width: 100%;
         }
         
         .section-title {
@@ -289,17 +297,21 @@
             scroll-margin-top: 80px;
         }
         
+        /* Footer - Full width */
         .footer {
             background: rgba(33, 33, 33, 0.95);
             backdrop-filter: blur(10px);
             color: white;
-            padding: 40px 24px;
+            padding: 40px;
             text-align: center;
             border-top: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
         }
         
         .footer p {
             color: rgba(255,255,255,0.8);
+            max-width: 1400px;
+            margin: 0 auto;
         }
         
         /* Badge styles */
@@ -331,13 +343,27 @@
         }
         
         /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-content h1 {
+                font-size: 48px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
         @media (max-width: 768px) {
             .hero {
-                padding: 140px 24px 60px;
+                padding: 140px 20px 60px;
             }
             
             .hero-content h1 {
                 font-size: 36px;
+            }
+            
+            .hero-content p {
+                font-size: 16px;
             }
             
             .feature-grid {
@@ -347,16 +373,22 @@
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
+                padding: 0 20px;
             }
             
             .nav-links {
                 flex-wrap: wrap;
                 justify-content: center;
+                gap: 15px;
             }
             
             .nav-buttons {
                 flex-wrap: wrap;
                 justify-content: center;
+            }
+            
+            .features, .footer {
+                padding: 60px 20px;
             }
         }
     </style>
@@ -385,7 +417,7 @@
             </div>
         </nav>
 
-        <!-- Hero Section - Clean and centered without the graph -->
+        <!-- Hero Section - Clean and centered without the graph, NO GAP ON RIGHT -->
         <section class="hero">
             <div class="hero-content">
                 <span class="hero-badge">KRA-Approved eTIMS Integrator</span>
