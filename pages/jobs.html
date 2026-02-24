@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Reset and base styles - same as previous pages */
+        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
@@ -42,16 +42,19 @@
             z-index: 1;
         }
 
-        /* Sidebar - same as dashboard */
+        /* Sidebar */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-right: 1px solid rgba(255, 255, 255, 0.2);
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease, transform 0.3s ease;
+            overflow-x: hidden;
+            z-index: 1000;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -67,6 +70,84 @@
             border-radius: 5px;
         }
 
+        /* Collapsed Sidebar */
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .nav-item span,
+        .sidebar.collapsed .user-details {
+            display: none;
+        }
+
+        .sidebar.collapsed .logo {
+            justify-content: center;
+            padding: 24px 0;
+        }
+
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: 12px 0;
+        }
+
+        .sidebar.collapsed .nav-item i {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .sidebar.collapsed .sidebar-footer {
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .sidebar.collapsed .user-info {
+            justify-content: center;
+            gap: 0;
+        }
+
+        .sidebar.collapsed .user-info i {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .sidebar.collapsed .logout-btn {
+            position: absolute;
+            right: 10px;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            position: fixed;
+            left: 260px;
+            top: 20px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            color: #667eea;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-toggle:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+
+        .sidebar-toggle.collapsed {
+            left: 60px;
+        }
+
         .sidebar .logo {
             padding: 24px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -74,6 +155,7 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .sidebar .logo-icon {
@@ -88,12 +170,15 @@
             justify-content: center;
             width: 40px;
             height: 40px;
+            flex-shrink: 0;
         }
 
         .sidebar .logo-text {
             font-size: 20px;
             font-weight: 700;
             color: #333;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
         }
 
         .sidebar .logo-highlight {
@@ -116,12 +201,15 @@
             font-weight: 500;
             transition: all 0.3s ease;
             text-decoration: none;
+            white-space: nowrap;
         }
 
         .sidebar .nav-item i {
             width: 20px;
             font-size: 18px;
             color: #667eea;
+            transition: margin 0.3s ease;
+            flex-shrink: 0;
         }
 
         .sidebar .nav-item:hover {
@@ -144,29 +232,36 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
 
         .user-info {
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .user-info i {
             font-size: 32px;
             color: #667eea;
+            flex-shrink: 0;
         }
 
         .user-details {
             flex: 1;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
         }
 
         .user-name {
             font-weight: 600;
             color: #333;
             display: block;
+            font-size: 14px;
         }
 
         .user-role {
@@ -187,6 +282,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .logout-btn:hover {
@@ -200,6 +296,13 @@
             flex: 1;
             margin-left: 280px;
             padding: 30px;
+            transition: margin-left 0.3s ease;
+            width: calc(100% - 280px);
+        }
+
+        .sidebar.collapsed + .main-content {
+            margin-left: 80px;
+            width: calc(100% - 80px);
         }
 
         /* Content Header */
@@ -286,6 +389,26 @@
             transform: translateY(-2px);
         }
 
+        .btn-danger {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
         /* Filters Bar */
         .filters-bar {
             background: rgba(255, 255, 255, 0.9);
@@ -298,6 +421,7 @@
             gap: 15px;
             align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .search-box {
@@ -370,6 +494,7 @@
             color: #333;
             font-size: 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
         }
 
         .data-table td {
@@ -377,6 +502,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             color: #333;
             font-size: 14px;
+            white-space: nowrap;
         }
 
         .data-table tbody tr:hover {
@@ -390,6 +516,7 @@
             font-size: 12px;
             font-weight: 600;
             display: inline-block;
+            white-space: nowrap;
         }
 
         .badge-success {
@@ -420,7 +547,8 @@
         /* Action Buttons */
         .actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            flex-wrap: nowrap;
         }
 
         .action-btn {
@@ -435,6 +563,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .action-btn:hover {
@@ -631,21 +760,70 @@
             justify-content: center;
             cursor: pointer;
             color: #667eea;
+            font-size: 18px;
         }
 
         /* Responsive */
         @media (max-width: 1200px) {
+            .filter-options {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 992px) {
             .main-content {
-                margin-left: 0;
+                margin-left: 0 !important;
+                width: 100% !important;
+                padding: 20px;
             }
             
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                width: 280px !important;
+                z-index: 1002;
             }
 
             .sidebar.show {
                 transform: translateX(0);
+            }
+
+            .sidebar.collapsed {
+                width: 280px !important;
+            }
+            
+            .sidebar.collapsed .logo-text,
+            .sidebar.collapsed .nav-item span,
+            .sidebar.collapsed .user-details {
+                display: block;
+            }
+            
+            .sidebar.collapsed .logo {
+                justify-content: flex-start;
+                padding: 24px;
+            }
+            
+            .sidebar.collapsed .nav-item {
+                justify-content: flex-start;
+                padding: 12px 16px;
+            }
+            
+            .sidebar.collapsed .nav-item i {
+                margin-right: 12px;
+            }
+            
+            .sidebar.collapsed .sidebar-footer {
+                justify-content: space-between;
+                padding: 20px;
+            }
+            
+            .sidebar.collapsed .user-info {
+                justify-content: flex-start;
+                gap: 12px;
+            }
+
+            .sidebar-toggle {
+                display: none;
             }
 
             .mobile-menu-toggle {
@@ -657,10 +835,12 @@
             .content-header {
                 flex-direction: column;
                 gap: 15px;
+                align-items: flex-start;
             }
 
             .filters-bar {
                 flex-direction: column;
+                align-items: stretch;
             }
 
             .search-box {
@@ -668,6 +848,7 @@
             }
 
             .filter-options {
+                flex-direction: column;
                 width: 100%;
             }
 
@@ -680,7 +861,7 @@
             }
 
             .data-table {
-                min-width: 1000px;
+                min-width: 1200px;
             }
 
             .form-row {
@@ -693,6 +874,11 @@
     <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
         <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Toggle Button (Desktop) -->
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-left"></i>
     </button>
 
     <div class="app-container">
@@ -791,7 +977,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Budget (KES)</th>
-                            <th>Actual Cost (KES)</th>
+                            <th>Actual (KES)</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -804,8 +990,8 @@
                             <td>Nairobi, CBD</td>
                             <td>01 Jan 2026</td>
                             <td>30 Jun 2026</td>
-                            <td>KES 2,500,000</td>
-                            <td>KES 1,850,000</td>
+                            <td>2,500,000</td>
+                            <td>1,850,000</td>
                             <td><span class="badge badge-success">Active</span></td>
                             <td class="actions">
                                 <button class="action-btn" onclick="editJob(1)" title="Edit">
@@ -829,8 +1015,8 @@
                             <td>Mombasa, Nyali</td>
                             <td>15 Feb 2026</td>
                             <td>15 Dec 2026</td>
-                            <td>KES 8,500,000</td>
-                            <td>KES 3,200,000</td>
+                            <td>8,500,000</td>
+                            <td>3,200,000</td>
                             <td><span class="badge badge-success">Active</span></td>
                             <td class="actions">
                                 <button class="action-btn" onclick="editJob(2)" title="Edit">
@@ -854,8 +1040,8 @@
                             <td>Nakuru</td>
                             <td>10 Mar 2025</td>
                             <td>10 Mar 2026</td>
-                            <td>KES 15,000,000</td>
-                            <td>KES 14,200,000</td>
+                            <td>15,000,000</td>
+                            <td>14,200,000</td>
                             <td><span class="badge badge-primary">Completed</span></td>
                             <td class="actions">
                                 <button class="action-btn" onclick="editJob(3)" title="Edit">
@@ -879,8 +1065,8 @@
                             <td>Kisumu</td>
                             <td>20 Apr 2025</td>
                             <td>20 Apr 2026</td>
-                            <td>KES 12,000,000</td>
-                            <td>KES 11,500,000</td>
+                            <td>12,000,000</td>
+                            <td>11,500,000</td>
                             <td><span class="badge badge-warning">Retainage</span></td>
                             <td class="actions">
                                 <button class="action-btn" onclick="editJob(4)" title="Edit">
@@ -1024,7 +1210,26 @@
             document.getElementById('sidebar').classList.toggle('show');
         }
 
-        // Get user info
+        // Toggle sidebar collapse
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            sidebar.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
+            
+            // Change icon direction
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.className = 'fas fa-chevron-right';
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                icon.className = 'fas fa-chevron-left';
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        }
+
+        // Get user info from localStorage
         document.addEventListener('DOMContentLoaded', function() {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             if (user.fullName) {
@@ -1033,6 +1238,16 @@
             if (user.role) {
                 document.getElementById('userRole').textContent = 
                     user.role.charAt(0).toUpperCase() + user.role.slice(1);
+            }
+            
+            // Load sidebar preference
+            const savedState = localStorage.getItem('sidebarCollapsed');
+            if (savedState === 'true') {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.getElementById('sidebarToggle');
+                sidebar.classList.add('collapsed');
+                toggleBtn.classList.add('collapsed');
+                toggleBtn.querySelector('i').className = 'fas fa-chevron-right';
             }
         });
 
@@ -1112,6 +1327,14 @@
                 document.getElementById('endDate').value = '2026-12-15';
                 document.getElementById('budgetTotal').value = '8500000';
                 document.getElementById('status').value = 'Active';
+            } else if (id === 3) {
+                document.getElementById('jobName').value = 'Highway Bridge';
+                document.getElementById('companyId').value = '3';
+                document.getElementById('location').value = 'Nakuru';
+                document.getElementById('startDate').value = '2025-03-10';
+                document.getElementById('endDate').value = '2026-03-10';
+                document.getElementById('budgetTotal').value = '15000000';
+                document.getElementById('status').value = 'Completed';
             }
             
             document.getElementById('jobModal').classList.add('show');
@@ -1146,6 +1369,19 @@
                     <div class="cost-item"><strong>Actual Cost:</strong> KES 3,200,000</div>
                     <div class="cost-item"><strong>Variance:</strong> <span style="color: #4caf50;">+KES 5,300,000</span></div>
                     <div class="cost-item"><strong>Status:</strong> <span class="badge badge-success">Active</span></div>
+                `;
+            } else if (id === 3) {
+                details = `
+                    <div class="cost-item"><strong>Job ID:</strong> 3</div>
+                    <div class="cost-item"><strong>Job Name:</strong> Highway Bridge</div>
+                    <div class="cost-item"><strong>Company:</strong> BuildWell Ltd</div>
+                    <div class="cost-item"><strong>Location:</strong> Nakuru</div>
+                    <div class="cost-item"><strong>Start Date:</strong> 10 Mar 2025</div>
+                    <div class="cost-item"><strong>End Date:</strong> 10 Mar 2026</div>
+                    <div class="cost-item"><strong>Budget:</strong> KES 15,000,000</div>
+                    <div class="cost-item"><strong>Actual Cost:</strong> KES 14,200,000</div>
+                    <div class="cost-item"><strong>Variance:</strong> <span style="color: #4caf50;">+KES 800,000</span></div>
+                    <div class="cost-item"><strong>Status:</strong> <span class="badge badge-primary">Completed</span></div>
                 `;
             }
             
@@ -1210,6 +1446,34 @@
                         
                         <div class="progress-bar" style="margin-top: 10px;">
                             <div class="progress-fill" style="width: 38%;"></div>
+                        </div>
+                    </div>
+                `;
+            } else if (id === 3) {
+                costs = `
+                    <div class="cost-details">
+                        <h3 style="margin-bottom: 15px; color: #333;">Cost Breakdown - Highway Bridge</h3>
+                        <div class="cost-item"><span>Labor:</span> <span>KES 6,500,000</span></div>
+                        <div class="cost-item"><span>Materials:</span> <span>KES 5,200,000</span></div>
+                        <div class="cost-item"><span>Equipment:</span> <span>KES 1,800,000</span></div>
+                        <div class="cost-item"><span>Subcontractors:</span> <span>KES 700,000</span></div>
+                        <div class="cost-item total"><span>Total:</span> <span>KES 14,200,000</span></div>
+                        
+                        <div style="margin-top: 20px;">
+                            <div class="cost-item"><span>Total Hours:</span> <span>9,500 hrs</span></div>
+                            <div class="cost-item"><span>Regular Hours:</span> <span>8,700 hrs</span></div>
+                            <div class="cost-item"><span>Overtime Hours:</span> <span>800 hrs</span></div>
+                            <div class="cost-item"><span>Average Rate:</span> <span>KES 684/hr</span></div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                            <div class="cost-item"><span>Budget:</span> <span>KES 15,000,000</span></div>
+                            <div class="cost-item"><span>Remaining:</span> <span style="color: #4caf50;">KES 800,000</span></div>
+                            <div class="cost-item"><span>Progress:</span> <span>95%</span></div>
+                        </div>
+                        
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill" style="width: 95%;"></div>
                         </div>
                     </div>
                 `;
