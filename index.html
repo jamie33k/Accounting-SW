@@ -8,21 +8,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Reset margins and padding on html/body */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
         .landing-page {
             min-height: 100vh;
             position: relative;
+            width: 100vw;
+            left: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
             background: url('https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg') no-repeat center center fixed;
             background-size: cover;
         }
         
-        /* Dark overlay to make text readable - FIXED to cover entire screen */
+        /* Dark overlay - edge to edge */
         .landing-page::before {
             content: '';
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100vw;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.6);
             z-index: 0;
             pointer-events: none;
@@ -34,28 +47,29 @@
             z-index: 1;
         }
         
-        /* Navbar with blur effect - full width */
+        /* Navbar - edge to edge */
         .navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding: 16px 0;
             position: fixed;
-            width: 100%;
+            width: 100vw;
+            left: 0;
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            left: 0;
-            right: 0;
         }
         
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 40px;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .logo {
@@ -123,10 +137,10 @@
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
-        /* FIXED Hero Section - No gap on right border */
+        /* Hero section - edge to edge background */
         .hero {
-            padding: 180px 40px 100px;
-            width: 100%;
+            padding: 180px 0 100px;
+            width: 100vw;
             text-align: center;
         }
         
@@ -134,6 +148,8 @@
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
         
         .hero-content h1 {
@@ -168,33 +184,33 @@
             border: 1px solid rgba(255,255,255,0.3);
         }
         
-        /* Features Section - Full width with centered content */
+        /* Features section - transparent to show background */
         .features {
-            padding: 80px 40px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255,255,255,0.2);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            width: 100%;
+            padding: 80px 0;
+            width: 100vw;
         }
         
         .features-container {
             max-width: 1400px;
             margin: 0 auto;
             width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
         
         .section-title {
             font-size: 32px;
             font-weight: 600;
-            color: #333;
+            color: white;
             margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         
         .section-subtitle {
-            color: #666;
+            color: rgba(255,255,255,0.9);
             margin-bottom: 40px;
             font-size: 18px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
         
         .feature-grid {
@@ -204,17 +220,19 @@
         }
         
         .feature-card {
-            background: white;
-            border: 1px solid #e0e0e0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 12px;
             padding: 30px;
             transition: all 0.3s ease;
             cursor: default;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
         
         .feature-card:hover {
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             border-color: #667eea;
             transform: translateY(-5px);
         }
@@ -222,7 +240,7 @@
         .feature-icon {
             width: 48px;
             height: 48px;
-            background: #e8f0fe;
+            background: rgba(102, 126, 234, 0.2);
             color: #667eea;
             border-radius: 12px;
             display: flex;
@@ -240,7 +258,7 @@
         }
         
         .feature-description {
-            color: #666;
+            color: #555;
             margin-bottom: 20px;
             line-height: 1.6;
         }
@@ -249,7 +267,7 @@
             display: flex;
             gap: 20px;
             padding: 20px 0;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid rgba(0,0,0,0.1);
             margin-top: 20px;
         }
         
@@ -265,7 +283,7 @@
         
         .stat-label {
             font-size: 12px;
-            color: #999;
+            color: #666;
         }
         
         .cta-button {
@@ -297,24 +315,26 @@
             scroll-margin-top: 80px;
         }
         
-        /* Footer - Full width */
+        /* Footer - edge to edge with transparency */
         .footer {
-            background: rgba(33, 33, 33, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(33, 33, 33, 0.8);
+            backdrop-filter: blur(5px);
             color: white;
-            padding: 40px;
+            padding: 40px 0;
             text-align: center;
             border-top: 1px solid rgba(255,255,255,0.1);
-            width: 100%;
+            width: 100vw;
         }
         
         .footer p {
             color: rgba(255,255,255,0.8);
             max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
         
-        /* Badge styles */
+        /* Badge styles - updated for transparent cards */
         .badge {
             padding: 6px 12px;
             border-radius: 20px;
@@ -323,23 +343,28 @@
         }
         
         .badge-info {
-            background: #e8f0fe;
+            background: rgba(102, 126, 234, 0.15);
             color: #667eea;
         }
         
         .badge-success {
-            background: #e6f7e6;
-            color: #4caf50;
+            background: rgba(76, 175, 80, 0.15);
+            color: #2e7d32;
         }
         
         .badge-warning {
-            background: #fff4e5;
-            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.15);
+            color: #b45309;
         }
         
         .badge-primary {
-            background: #e8f0fe;
+            background: rgba(102, 126, 234, 0.15);
             color: #667eea;
+        }
+        
+        /* Remove white background from pricing section */
+        #pricing.features {
+            background: transparent;
         }
         
         /* Responsive */
@@ -355,7 +380,7 @@
         
         @media (max-width: 768px) {
             .hero {
-                padding: 140px 20px 60px;
+                padding: 140px 0 60px;
             }
             
             .hero-content h1 {
@@ -373,7 +398,6 @@
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
-                padding: 0 20px;
             }
             
             .nav-links {
@@ -385,10 +409,6 @@
             .nav-buttons {
                 flex-wrap: wrap;
                 justify-content: center;
-            }
-            
-            .features, .footer {
-                padding: 60px 20px;
             }
         }
     </style>
@@ -417,11 +437,11 @@
             </div>
         </nav>
 
-        <!-- Hero Section - Clean and centered without the graph, NO GAP ON RIGHT -->
+        <!-- Hero Section - Background stretches edge-to-edge -->
         <section class="hero">
             <div class="hero-content">
                 <span class="hero-badge">KRA-Approved eTIMS Integrator</span>
-                <h1>Comprehensive Accounting Solutions for Growing Businesses</h1>
+                <h1>Comprehensive accounting software for growing businesses</h1>
                 <p>eTIMS-compliant accounting software that helps you send invoices, track inventory, manage cash flow, and file VAT returns to KRA.</p>
                 <button class="cta-button" onclick="window.location.href='pages/register.html'">
                     Get Started <i class="fas fa-arrow-right"></i>
@@ -429,10 +449,10 @@
             </div>
         </section>
 
-        <!-- Spotlight Section -->
+        <!-- Spotlight Section - Now with transparent background -->
         <section id="features" class="features">
             <div class="features-container">
-                <span class="hero-badge" style="background: #667eea; color: white;">SPOTLIGHT</span>
+                <span class="hero-badge" style="background: rgba(102, 126, 234, 0.3); color: white; border: 1px solid rgba(255,255,255,0.3);">SPOTLIGHT</span>
                 <h2 class="section-title">Engineered to Unlock Business Growth</h2>
                 <p class="section-subtitle">Powerful features to help you manage your finances</p>
                 
@@ -468,7 +488,7 @@
                         </div>
                         <h3 class="feature-title">Accounting Across Devices</h3>
                         <p class="feature-description">Whether you're on the web, smartphone or desktop app, promptly send quotes right after meetings, track business expenses, log time, and view reports!</p>
-                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);">
                             <span class="badge badge-success">Patricia Boyle ></span>
                             <span class="badge badge-warning" style="margin-left: 10px;">QT-000022</span>
                         </div>
@@ -489,13 +509,13 @@
             </div>
         </section>
 
-        <!-- Pricing Section -->
-        <section id="pricing" class="features" style="background: rgba(255,255,255,0.98);">
+        <!-- Pricing Section - Now with transparent background -->
+        <section id="pricing" class="features">
             <div class="features-container">
                 <h2 class="section-title">Simple, Transparent Pricing</h2>
                 <p class="section-subtitle">Choose the plan that fits your business</p>
                 <div style="text-align: center; padding: 40px;">
-                    <p style="font-size: 18px; color: #666;">Contact sales for custom pricing tailored to your needs.</p>
+                    <p style="font-size: 18px; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">Contact sales for custom pricing tailored to your needs.</p>
                     <button class="btn-primary" style="margin-top: 20px; padding: 15px 40px;" onclick="window.location.href='pages/contact.html'">
                         Contact Sales
                     </button>
@@ -503,7 +523,7 @@
             </div>
         </section>
 
-        <!-- Solutions Section -->
+        <!-- Solutions Section - Now with transparent background -->
         <section id="solutions" class="features">
             <div class="features-container">
                 <h2 class="section-title">Solutions for Every Business</h2>
@@ -523,7 +543,7 @@
             </div>
         </section>
 
-        <!-- Footer -->
+        <!-- Footer - edge to edge with transparency -->
         <footer class="footer">
             <p>&copy; 2024 AccuFlow. All rights reserved. | KRA-Approved eTIMS Integrator</p>
         </footer>
