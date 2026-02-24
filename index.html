@@ -3,75 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AccuFlow - Accounting Software</title>
+    <title>AccuFlow - Accounting Software for Growing Businesses</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .landing-page {
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .hero {
+            padding: 120px 24px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .hero-content h1 {
+            font-size: 48px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--gray-800);
+        }
+        
+        .hero-content p {
+            font-size: 18px;
+            color: var(--gray-500);
+            margin-bottom: 30px;
+        }
+        
+        .hero-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .features {
+            padding: 60px 24px;
+            background: white;
+        }
+        
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 10px;
+        }
+        
+        .section-subtitle {
+            color: var(--gray-500);
+            margin-bottom: 40px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 30px;
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .feature-description {
+            color: var(--gray-500);
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            padding: 20px 0;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+        
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: var(--primary-dark);
+        }
+    </style>
 </head>
 <body>
     <div class="landing-page">
+        <!-- Navigation -->
         <nav class="navbar">
             <div class="nav-container">
-                <div class="logo">
-                    <i class="fas fa-calculator"></i>
-                    <span>AccuFlow</span>
-                </div>
+                <div class="logo">AccuFlow</div>
                 <div class="nav-links">
-                    <a href="#features">Features</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#about">About</a>
-                    <button class="btn-primary" onclick="window.location.href='pages/login.html'">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </button>
+                    <a href="#">Features</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Solutions</a>
+                    <a href="#">Customers</a>
+                    <a href="#">Resources</a>
+                    <button class="btn-primary" onclick="window.location.href='pages/login.html'">Sign In</button>
+                    <button class="btn-secondary" onclick="window.location.href='pages/register.html'">Sign Up Now</button>
                 </div>
             </div>
         </nav>
-        
-        <header class="hero">
+
+        <!-- Hero Section -->
+        <section class="hero">
             <div class="hero-content">
-                <h1>Smart Accounting with AI Predictions</h1>
-                <p>Manage your finances, track expenses, and get intelligent insights with our ML-powered accounting software</p>
-                <div class="hero-buttons">
-                    <button class="btn-primary btn-large" onclick="window.location.href='pages/login.html'">
-                        Get Started <i class="fas fa-arrow-right"></i>
-                    </button>
-                    <button class="btn-secondary btn-large" onclick="window.location.href='#demo'">
-                        Watch Demo
-                    </button>
-                </div>
+                <span class="hero-badge">KRA-Approved eTIMS Integrator</span>
+                <h1>Comprehensive accounting software for growing businesses</h1>
+                <p>eTIMS-compliant accounting software that helps you send invoices, track inventory, manage cash flow, and file VAT returns to KRA.</p>
+                <button class="cta-button" onclick="window.location.href='pages/register.html'">Get Started</button>
             </div>
             <div class="hero-image">
-                <img src="assets/images/dashboard-preview.png" alt="Dashboard Preview">
+                <img src="assets/images/dashboard-preview.png" alt="Dashboard Preview" style="width: 100%; border-radius: 12px; box-shadow: var(--box-shadow-lg);">
             </div>
-        </header>
-        
-        <section id="features" class="features">
-            <h2>Powerful Features</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <i class="fas fa-robot"></i>
-                    <h3>ML Predictions</h3>
-                    <p>AI-powered expense predictions and pattern recognition</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-file-invoice"></i>
-                    <h3>Invoice Management</h3>
-                    <p>Create, send, and track invoices with ease</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Real-time Reports</h3>
-                    <p>Comprehensive P&L, expense, and income reports</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-users"></i>
-                    <h3>Employee Management</h3>
-                    <p>Track timesheets and manage payroll</p>
+        </section>
+
+        <!-- Spotlight Section -->
+        <section class="features">
+            <div class="features-container">
+                <span class="hero-badge">SPOTLIGHT</span>
+                <h2 class="section-title">Engineered to Unlock Business Growth</h2>
+                
+                <div class="feature-grid">
+                    <!-- VAT Accounting Card -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3 class="feature-title">VAT accounting</h3>
+                        <p class="feature-description">Learn your VAT liability, send VAT compliant invoice, and generate VAT reports automatically.</p>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value">VAT3 Return</div>
+                                <div class="stat-label">FILED</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">755</div>
+                                <div class="stat-label">VAT on Sales</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">455</div>
+                                <div class="stat-label">VAT on Purchases</div>
+                            </div>
+                        </div>
+                        <span class="badge badge-info">E-Invoicing</span>
+                    </div>
+
+                    <!-- Accounting Across Devices Card -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Accounting Across Devices</h3>
+                        <p class="feature-description">Whether you're on the web, smartphone or desktop app, promptly send quotes right after meetings, track business expenses, log time, and view reports!</p>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                            <span class="badge badge-success">Patricia Boyle ></span>
+                            <span class="badge badge-warning" style="margin-left: 10px;">QT-000022</span>
+                        </div>
+                    </div>
+
+                    <!-- Coming Soon or Placeholder -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3 class="feature-title">Business Intelligence</h3>
+                        <p class="feature-description">Get detailed insights into your business performance with AI-powered analytics and predictions.</p>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
-    
+
     <script src="assets/js/main.js"></script>
 </body>
 </html>
