@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AccuFlow - Accounting Solutions for Growing Businesses</title>
+    <title>AccuFlow - Accounting Software for Growing Businesses</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,7 +11,6 @@
         .landing-page {
             min-height: 100vh;
             position: relative;
-            /* New background image from Bolder Group */
             background: url('https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg') no-repeat center center fixed;
             background-size: cover;
         }
@@ -24,7 +23,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6); /* Darker overlay for better contrast */
+            background: rgba(0, 0, 0, 0.6);
             z-index: 0;
             pointer-events: none;
         }
@@ -122,18 +121,21 @@
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
+        /* Updated Hero Section - Centered, no graph */
         .hero {
-            padding: 140px 24px 80px;
-            max-width: 1200px;
+            padding: 180px 24px 100px;
+            max-width: 800px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
         }
         
         .hero-content h1 {
-            font-size: 48px;
+            font-size: 52px;
             line-height: 1.2;
             margin-bottom: 20px;
             color: white;
@@ -145,6 +147,7 @@
             color: rgba(255,255,255,0.95);
             margin-bottom: 30px;
             text-shadow: 0 1px 5px rgba(0,0,0,0.3);
+            line-height: 1.6;
         }
         
         .hero-badge {
@@ -330,9 +333,11 @@
         /* Responsive */
         @media (max-width: 768px) {
             .hero {
-                grid-template-columns: 1fr;
-                text-align: center;
-                padding-top: 120px;
+                padding: 140px 24px 60px;
+            }
+            
+            .hero-content h1 {
+                font-size: 36px;
             }
             
             .feature-grid {
@@ -352,10 +357,6 @@
             .nav-buttons {
                 flex-wrap: wrap;
                 justify-content: center;
-            }
-            
-            .hero-content h1 {
-                font-size: 36px;
             }
         }
     </style>
@@ -384,20 +385,15 @@
             </div>
         </nav>
 
-        <!-- Hero Section -->
+        <!-- Hero Section - Clean and centered without the graph -->
         <section class="hero">
             <div class="hero-content">
                 <span class="hero-badge">KRA-Approved eTIMS Integrator</span>
-                <h1>Comprehensive accounting software for growing businesses</h1>
+                <h1>Comprehensive Accounting Solutions for Growing Businesses</h1>
                 <p>eTIMS-compliant accounting software that helps you send invoices, track inventory, manage cash flow, and file VAT returns to KRA.</p>
                 <button class="cta-button" onclick="window.location.href='pages/register.html'">
                     Get Started <i class="fas fa-arrow-right"></i>
                 </button>
-            </div>
-            <div class="hero-image">
-                <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.3);">
-                    <i class="fas fa-chart-line" style="font-size: 120px; color: white; opacity: 0.8;"></i>
-                </div>
             </div>
         </section>
 
