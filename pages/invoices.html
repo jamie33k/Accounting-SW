@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoices - AccuFlow</title>
+    <title>Timesheets - AccuFlow</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Reset and base styles - same as employees.html */
+        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
@@ -42,16 +42,19 @@
             z-index: 1;
         }
 
-        /* Sidebar - same as dashboard */
+        /* Sidebar */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-right: 1px solid rgba(255, 255, 255, 0.2);
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease, transform 0.3s ease;
+            overflow-x: hidden;
+            z-index: 1000;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -67,6 +70,84 @@
             border-radius: 5px;
         }
 
+        /* Collapsed Sidebar */
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .nav-item span,
+        .sidebar.collapsed .user-details {
+            display: none;
+        }
+
+        .sidebar.collapsed .logo {
+            justify-content: center;
+            padding: 24px 0;
+        }
+
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: 12px 0;
+        }
+
+        .sidebar.collapsed .nav-item i {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .sidebar.collapsed .sidebar-footer {
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .sidebar.collapsed .user-info {
+            justify-content: center;
+            gap: 0;
+        }
+
+        .sidebar.collapsed .user-info i {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .sidebar.collapsed .logout-btn {
+            position: absolute;
+            right: 10px;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            position: fixed;
+            left: 260px;
+            top: 20px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            color: #667eea;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-toggle:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+
+        .sidebar-toggle.collapsed {
+            left: 60px;
+        }
+
         .sidebar .logo {
             padding: 24px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -74,6 +155,7 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .sidebar .logo-icon {
@@ -88,12 +170,15 @@
             justify-content: center;
             width: 40px;
             height: 40px;
+            flex-shrink: 0;
         }
 
         .sidebar .logo-text {
             font-size: 20px;
             font-weight: 700;
             color: #333;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
         }
 
         .sidebar .logo-highlight {
@@ -116,12 +201,15 @@
             font-weight: 500;
             transition: all 0.3s ease;
             text-decoration: none;
+            white-space: nowrap;
         }
 
         .sidebar .nav-item i {
             width: 20px;
             font-size: 18px;
             color: #667eea;
+            transition: margin 0.3s ease;
+            flex-shrink: 0;
         }
 
         .sidebar .nav-item:hover {
@@ -144,29 +232,36 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
 
         .user-info {
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .user-info i {
             font-size: 32px;
             color: #667eea;
+            flex-shrink: 0;
         }
 
         .user-details {
             flex: 1;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
         }
 
         .user-name {
             font-weight: 600;
             color: #333;
             display: block;
+            font-size: 14px;
         }
 
         .user-role {
@@ -187,6 +282,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .logout-btn:hover {
@@ -200,6 +296,13 @@
             flex: 1;
             margin-left: 280px;
             padding: 30px;
+            transition: margin-left 0.3s ease;
+            width: calc(100% - 280px);
+        }
+
+        .sidebar.collapsed + .main-content {
+            margin-left: 80px;
+            width: calc(100% - 80px);
         }
 
         /* Content Header */
@@ -266,26 +369,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-success {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-        }
-
-        .btn-success:hover {
-            background: #388e3c;
-            transform: translateY(-2px);
-        }
-
         /* Summary Cards */
         .summary-cards {
             display: grid;
@@ -300,10 +383,10 @@
             border-radius: 20px;
             padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             gap: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .summary-icon {
@@ -314,6 +397,7 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            flex-shrink: 0;
         }
 
         .summary-icon.blue {
@@ -338,18 +422,21 @@
 
         .summary-info {
             flex: 1;
+            min-width: 0;
         }
 
         .summary-info h3 {
             font-size: 14px;
             color: #666;
             margin-bottom: 5px;
+            white-space: nowrap;
         }
 
         .summary-value {
             font-size: 24px;
             font-weight: 700;
             color: #333;
+            white-space: nowrap;
         }
 
         /* Filters Bar */
@@ -364,49 +451,38 @@
             gap: 15px;
             align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-            position: relative;
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #667eea;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 12px 12px 45px;
+        .date-range input {
+            padding: 10px 15px;
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 14px;
             color: #333;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
         .filter-options {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            flex: 1;
+            justify-content: flex-end;
         }
 
         .filter-options select {
-            padding: 12px 20px;
+            padding: 10px 15px;
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 14px;
             color: #333;
             min-width: 150px;
@@ -436,6 +512,7 @@
             color: #333;
             font-size: 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
         }
 
         .data-table td {
@@ -443,6 +520,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             color: #333;
             font-size: 14px;
+            white-space: nowrap;
         }
 
         .data-table tbody tr:hover {
@@ -456,6 +534,7 @@
             font-size: 12px;
             font-weight: 600;
             display: inline-block;
+            white-space: nowrap;
         }
 
         .badge-success {
@@ -468,25 +547,21 @@
             color: #b45309;
         }
 
-        .badge-info {
-            background: rgba(102, 126, 234, 0.15);
-            color: #667eea;
-        }
-
         .badge-danger {
             background: rgba(244, 67, 54, 0.15);
             color: #c62828;
         }
 
-        .badge-secondary {
-            background: rgba(108, 117, 125, 0.15);
-            color: #6c757d;
+        .badge-info {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
         }
 
         /* Action Buttons */
         .actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            flex-wrap: nowrap;
         }
 
         .action-btn {
@@ -501,6 +576,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .action-btn:hover {
@@ -509,16 +585,116 @@
             transform: translateY(-2px);
         }
 
-        .action-btn.send:hover {
+        .action-btn.approve:hover {
             background: #4caf50;
         }
 
-        .action-btn.download:hover {
-            background: #9b59b6;
+        .action-btn.reject:hover {
+            background: #f44336;
         }
 
-        .action-btn.delete:hover {
-            background: #f44336;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+
+        .close {
+            font-size: 28px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #f44336;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
         }
 
         /* Mobile menu toggle */
@@ -538,6 +714,7 @@
             justify-content: center;
             cursor: pointer;
             color: #667eea;
+            font-size: 18px;
         }
 
         /* Responsive */
@@ -546,17 +723,65 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             
+            .filter-options {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 992px) {
             .main-content {
-                margin-left: 0;
+                margin-left: 0 !important;
+                width: 100% !important;
+                padding: 20px;
             }
             
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                width: 280px !important;
+                z-index: 1002;
             }
 
             .sidebar.show {
                 transform: translateX(0);
+            }
+
+            .sidebar.collapsed {
+                width: 280px !important;
+            }
+            
+            .sidebar.collapsed .logo-text,
+            .sidebar.collapsed .nav-item span,
+            .sidebar.collapsed .user-details {
+                display: block;
+            }
+            
+            .sidebar.collapsed .logo {
+                justify-content: flex-start;
+                padding: 24px;
+            }
+            
+            .sidebar.collapsed .nav-item {
+                justify-content: flex-start;
+                padding: 12px 16px;
+            }
+            
+            .sidebar.collapsed .nav-item i {
+                margin-right: 12px;
+            }
+            
+            .sidebar.collapsed .sidebar-footer {
+                justify-content: space-between;
+                padding: 20px;
+            }
+            
+            .sidebar.collapsed .user-info {
+                justify-content: flex-start;
+                gap: 12px;
+            }
+
+            .sidebar-toggle {
+                display: none;
             }
 
             .mobile-menu-toggle {
@@ -568,6 +793,7 @@
             .content-header {
                 flex-direction: column;
                 gap: 15px;
+                align-items: flex-start;
             }
 
             .summary-cards {
@@ -576,17 +802,28 @@
 
             .filters-bar {
                 flex-direction: column;
+                align-items: stretch;
             }
 
-            .search-box {
+            .date-range {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .date-range input {
                 width: 100%;
             }
 
             .filter-options {
+                flex-direction: column;
                 width: 100%;
             }
 
             .filter-options select {
+                width: 100%;
+            }
+
+            .filter-options button {
                 width: 100%;
             }
 
@@ -595,7 +832,11 @@
             }
 
             .data-table {
-                min-width: 1000px;
+                min-width: 1200px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -604,6 +845,11 @@
     <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
         <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Toggle Button (Desktop) -->
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-left"></i>
     </button>
 
     <div class="app-container">
@@ -623,7 +869,7 @@
                     <i class="fas fa-users"></i>
                     <span>Employees</span>
                 </a>
-                <a href="timesheets.html" class="nav-item">
+                <a href="timesheets.html" class="nav-item active">
                     <i class="fas fa-clock"></i>
                     <span>Timesheets</span>
                 </a>
@@ -631,7 +877,7 @@
                     <i class="fas fa-briefcase"></i>
                     <span>Jobs</span>
                 </a>
-                <a href="invoices.html" class="nav-item active">
+                <a href="invoices.html" class="nav-item">
                     <i class="fas fa-file-invoice"></i>
                     <span>Invoices</span>
                 </a>
@@ -662,9 +908,9 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="content-header">
-                <h1>Invoices</h1>
-                <button class="btn-primary" onclick="openCreateInvoiceModal()">
-                    <i class="fas fa-plus"></i> Create Invoice
+                <h1>Timesheets</h1>
+                <button class="btn-primary" onclick="openAddTimesheetModal()">
+                    <i class="fas fa-plus"></i> Add Timesheet
                 </button>
             </header>
 
@@ -672,177 +918,198 @@
             <div class="summary-cards">
                 <div class="summary-card">
                     <div class="summary-icon blue">
-                        <i class="fas fa-file-invoice"></i>
+                        <i class="fas fa-clock"></i>
                     </div>
                     <div class="summary-info">
-                        <h3>Total Invoiced</h3>
-                        <div class="summary-value">KES 1,245,000</div>
+                        <h3>Total Hours</h3>
+                        <div class="summary-value">1,245 hrs</div>
+                        <div class="summary-trend">
+                            <i class="fas fa-arrow-up"></i> 8.2%
+                        </div>
                     </div>
                 </div>
                 
                 <div class="summary-card">
                     <div class="summary-icon green">
-                        <i class="fas fa-check-circle"></i>
+                        <i class="fas fa-user-clock"></i>
                     </div>
                     <div class="summary-info">
-                        <h3>Paid</h3>
-                        <div class="summary-value">KES 892,000</div>
+                        <h3>Regular Hours</h3>
+                        <div class="summary-value">1,120 hrs</div>
                     </div>
                 </div>
                 
                 <div class="summary-card">
                     <div class="summary-icon orange">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-hourglass-half"></i>
                     </div>
                     <div class="summary-info">
-                        <h3>Due</h3>
-                        <div class="summary-value">KES 353,000</div>
+                        <h3>Overtime Hours</h3>
+                        <div class="summary-value">125 hrs</div>
                     </div>
                 </div>
                 
                 <div class="summary-card">
                     <div class="summary-icon purple">
-                        <i class="fas fa-percent"></i>
+                        <i class="fas fa-money-bill"></i>
                     </div>
                     <div class="summary-info">
-                        <h3>Retainage</h3>
-                        <div class="summary-value">KES 124,500</div>
+                        <h3>Total Payroll</h3>
+                        <div class="summary-value">KES 425,000</div>
                     </div>
                 </div>
             </div>
             
             <!-- Filters -->
             <div class="filters-bar">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search invoices by number, client...">
+                <div class="date-range">
+                    <input type="date" id="startDate" value="2026-03-01">
+                    <span>to</span>
+                    <input type="date" id="endDate" value="2026-03-31">
                 </div>
                 <div class="filter-options">
-                    <select id="statusFilter">
-                        <option value="">All Status</option>
-                        <option value="Paid">Paid</option>
-                        <option value="Sent">Sent</option>
-                        <option value="Partial">Partial</option>
-                        <option value="Draft">Draft</option>
+                    <select id="employeeFilter">
+                        <option value="">All Employees</option>
+                        <option value="1">John Doe</option>
+                        <option value="2">Jane Smith</option>
+                        <option value="3">Mike Johnson</option>
+                        <option value="4">Sarah Williams</option>
                     </select>
                     <select id="jobFilter">
                         <option value="">All Jobs</option>
                         <option value="1">Office Renovation</option>
-                        <option value="2">Construction Project</option>
-                        <option value="3">Consulting Services</option>
+                        <option value="2">Residential Complex</option>
+                        <option value="3">Highway Bridge</option>
+                        <option value="4">Shopping Mall</option>
                     </select>
+                    <button class="btn-primary" onclick="filterTimesheets()">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <button class="btn-secondary" onclick="exportTimesheets()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
                 </div>
             </div>
             
-            <!-- Invoices Table -->
+            <!-- Timesheets Table -->
             <div class="table-container">
-                <table class="data-table" id="invoicesTable">
+                <table class="data-table" id="timesheetsTable">
                     <thead>
                         <tr>
-                            <th>Invoice #</th>
+                            <th>ID</th>
+                            <th>Employee</th>
                             <th>Job</th>
-                            <th>Client</th>
-                            <th>Date</th>
-                            <th>Due Date</th>
-                            <th>Total (KES)</th>
-                            <th>Amount Due (KES)</th>
+                            <th>Week Ending</th>
+                            <th>Regular</th>
+                            <th>Overtime</th>
+                            <th>Total</th>
+                            <th>Rate (KES)</th>
+                            <th>Total Pay (KES)</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="invoicesTableBody">
+                    <tbody id="timesheetsTableBody">
                         <tr>
-                            <td><strong>INV-2024-001</strong></td>
+                            <td>1</td>
+                            <td><strong>John Doe</strong></td>
                             <td>Office Renovation</td>
-                            <td>ABC Corporation</td>
-                            <td>15 Feb 2026</td>
-                            <td>15 Mar 2026</td>
-                            <td>KES 450,000</td>
-                            <td>KES 0</td>
-                            <td><span class="badge badge-success">Paid</span></td>
+                            <td>28 Mar 2026</td>
+                            <td>40</td>
+                            <td>5</td>
+                            <td>45</td>
+                            <td>2,500</td>
+                            <td>118,750</td>
+                            <td><span class="badge badge-success">Approved</span></td>
                             <td class="actions">
-                                <button class="action-btn" onclick="editInvoice(1)" title="Edit">
+                                <button class="action-btn" onclick="editTimesheet(1)" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn send" onclick="sendInvoice(1)" title="Send">
-                                    <i class="fas fa-paper-plane"></i>
+                                <button class="action-btn" onclick="viewTimesheet(1)" title="View">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="action-btn download" onclick="downloadInvoice(1)" title="Download">
-                                    <i class="fas fa-download"></i>
+                                <button class="action-btn approve" onclick="approveTimesheet(1)" title="Approve">
+                                    <i class="fas fa-check"></i>
                                 </button>
-                                <button class="action-btn delete" onclick="deleteInvoice(1)" title="Delete">
+                                <button class="action-btn delete" onclick="deleteTimesheet(1)" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>INV-2024-002</strong></td>
-                            <td>Construction Project</td>
-                            <td>XYZ Ltd</td>
-                            <td>20 Feb 2026</td>
-                            <td>20 Mar 2026</td>
-                            <td>KES 325,000</td>
-                            <td>KES 325,000</td>
-                            <td><span class="badge badge-info">Sent</span></td>
+                            <td>2</td>
+                            <td><strong>Jane Smith</strong></td>
+                            <td>Residential Complex</td>
+                            <td>28 Mar 2026</td>
+                            <td>38</td>
+                            <td>2</td>
+                            <td>40</td>
+                            <td>3,200</td>
+                            <td>131,200</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
                             <td class="actions">
-                                <button class="action-btn" onclick="editInvoice(2)" title="Edit">
+                                <button class="action-btn" onclick="editTimesheet(2)" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn send" onclick="sendInvoice(2)" title="Send">
-                                    <i class="fas fa-paper-plane"></i>
+                                <button class="action-btn" onclick="viewTimesheet(2)" title="View">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="action-btn download" onclick="downloadInvoice(2)" title="Download">
-                                    <i class="fas fa-download"></i>
+                                <button class="action-btn approve" onclick="approveTimesheet(2)" title="Approve">
+                                    <i class="fas fa-check"></i>
                                 </button>
-                                <button class="action-btn delete" onclick="deleteInvoice(2)" title="Delete">
+                                <button class="action-btn reject" onclick="rejectTimesheet(2)" title="Reject">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteTimesheet(2)" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>INV-2024-003</strong></td>
-                            <td>Consulting Services</td>
-                            <td>Tech Solutions</td>
-                            <td>25 Feb 2026</td>
-                            <td>25 Mar 2026</td>
-                            <td>KES 180,000</td>
-                            <td>KES 90,000</td>
-                            <td><span class="badge badge-warning">Partial</span></td>
+                            <td>3</td>
+                            <td><strong>Mike Johnson</strong></td>
+                            <td>Highway Bridge</td>
+                            <td>28 Mar 2026</td>
+                            <td>42</td>
+                            <td>4</td>
+                            <td>46</td>
+                            <td>2,800</td>
+                            <td>134,400</td>
+                            <td><span class="badge badge-success">Approved</span></td>
                             <td class="actions">
-                                <button class="action-btn" onclick="editInvoice(3)" title="Edit">
+                                <button class="action-btn" onclick="editTimesheet(3)" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn send" onclick="sendInvoice(3)" title="Send">
-                                    <i class="fas fa-paper-plane"></i>
+                                <button class="action-btn" onclick="viewTimesheet(3)" title="View">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="action-btn download" onclick="downloadInvoice(3)" title="Download">
-                                    <i class="fas fa-download"></i>
+                                <button class="action-btn approve" onclick="approveTimesheet(3)" title="Approve">
+                                    <i class="fas fa-check"></i>
                                 </button>
-                                <button class="action-btn delete" onclick="deleteInvoice(3)" title="Delete">
+                                <button class="action-btn delete" onclick="deleteTimesheet(3)" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>INV-2024-004</strong></td>
-                            <td>Office Renovation</td>
-                            <td>ABC Corporation</td>
-                            <td>01 Mar 2026</td>
-                            <td>01 Apr 2026</td>
-                            <td>KES 290,000</td>
-                            <td>KES 290,000</td>
-                            <td><span class="badge badge-secondary">Draft</span></td>
+                            <td>4</td>
+                            <td><strong>Sarah Williams</strong></td>
+                            <td>Shopping Mall</td>
+                            <td>28 Mar 2026</td>
+                            <td>35</td>
+                            <td>0</td>
+                            <td>35</td>
+                            <td>2,200</td>
+                            <td>77,000</td>
+                            <td><span class="badge badge-danger">Rejected</span></td>
                             <td class="actions">
-                                <button class="action-btn" onclick="editInvoice(4)" title="Edit">
+                                <button class="action-btn" onclick="editTimesheet(4)" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn send" onclick="sendInvoice(4)" title="Send">
-                                    <i class="fas fa-paper-plane"></i>
+                                <button class="action-btn" onclick="viewTimesheet(4)" title="View">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="action-btn download" onclick="downloadInvoice(4)" title="Download">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                                <button class="action-btn delete" onclick="deleteInvoice(4)" title="Delete">
+                                <button class="action-btn delete" onclick="deleteTimesheet(4)" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -853,123 +1120,94 @@
         </main>
     </div>
 
-    <!-- Create Invoice Modal -->
-    <div id="invoiceModal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
+    <!-- Add/Edit Timesheet Modal -->
+    <div id="timesheetModal" class="modal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Create Invoice</h2>
+                <h2 id="modalTitle">Add Timesheet</h2>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
-            <form id="invoiceForm" onsubmit="saveInvoice(event)">
-                <input type="hidden" id="invoiceId">
+            <form id="timesheetForm" onsubmit="saveTimesheet(event)">
+                <input type="hidden" id="timesheetId">
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label><i class="fas fa-hashtag"></i> Invoice Number</label>
-                        <input type="text" id="invoiceNumber" value="INV-2024-005" required>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-briefcase"></i> Job</label>
-                        <select id="jobId" required>
-                            <option value="1">Office Renovation</option>
-                            <option value="2">Construction Project</option>
-                            <option value="3">Consulting Services</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Employee</label>
+                    <select id="employeeId" required>
+                        <option value="">Select Employee</option>
+                        <option value="1">John Doe</option>
+                        <option value="2">Jane Smith</option>
+                        <option value="3">Mike Johnson</option>
+                        <option value="4">Sarah Williams</option>
+                    </select>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label><i class="fas fa-building"></i> Client</label>
-                        <select id="clientId" required>
-                            <option value="1">ABC Corporation</option>
-                            <option value="2">XYZ Ltd</option>
-                            <option value="3">Tech Solutions</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-calendar"></i> Invoice Date</label>
-                        <input type="date" id="invoiceDate" value="2026-03-01" required>
-                    </div>
+                <div class="form-group">
+                    <label><i class="fas fa-briefcase"></i> Job</label>
+                    <select id="jobId" required>
+                        <option value="">Select Job</option>
+                        <option value="1">Office Renovation</option>
+                        <option value="2">Residential Complex</option>
+                        <option value="3">Highway Bridge</option>
+                        <option value="4">Shopping Mall</option>
+                    </select>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label><i class="fas fa-calendar-alt"></i> Due Date</label>
-                        <input type="date" id="dueDate" value="2026-03-31" required>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-percent"></i> Retainage %</label>
-                        <input type="number" id="retainagePercent" value="10" min="0" max="100">
-                    </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Week Ending</label>
+                    <input type="date" id="weekEnding" required>
                 </div>
-
-                <h3 style="margin: 20px 0 15px; color: #333;">Line Items</h3>
                 
-                <div style="background: rgba(102, 126, 234, 0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
-                    <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 40px; gap: 10px; margin-bottom: 10px; font-weight: 600; color: #333;">
-                        <div>Description</div>
-                        <div>Qty</div>
-                        <div>Unit Price</div>
-                        <div>Amount</div>
-                        <div></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Hours Worked</label>
+                        <input type="number" id="hoursWorked" min="0" max="168" step="0.5" value="40" required onchange="calculateOvertime()">
                     </div>
                     
-                    <div id="lineItems">
-                        <!-- Line items will be added here -->
-                    </div>
-                    
-                    <button type="button" class="btn-secondary" style="margin-top: 10px;" onclick="addLineItem()">
-                        <i class="fas fa-plus"></i> Add Line Item
-                    </button>
-                </div>
-                
-                <div style="background: rgba(0,0,0,0.03); padding: 15px; border-radius: 12px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="font-weight: 600;">Subtotal:</span>
-                        <span id="subtotal">KES 0</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="font-weight: 600;">Retainage:</span>
-                        <span id="retainageAmount">KES 0</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: #667eea;">
-                        <span>Total Amount:</span>
-                        <span id="totalAmount">KES 0</span>
+                    <div class="form-group">
+                        <label><i class="fas fa-hourglass-half"></i> Overtime Hours</label>
+                        <input type="number" id="overtimeHours" min="0" step="0.5" value="0" readonly>
                     </div>
                 </div>
                 
                 <div class="modal-footer">
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Save Invoice</button>
+                    <button type="submit" class="btn-primary">Save Timesheet</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Send Invoice Modal -->
-    <div id="sendModal" class="modal">
+    <!-- View Timesheet Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Timesheet Details</h2>
+                <span class="close" onclick="closeViewModal()">&times;</span>
+            </div>
+            <div id="viewDetails" style="padding: 20px;">
+                <!-- Details will be populated by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div id="rejectModal" class="modal">
         <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
-                <h2>Send Invoice</h2>
-                <span class="close" onclick="closeSendModal()">&times;</span>
+                <h2>Reject Timesheet</h2>
+                <span class="close" onclick="closeRejectModal()">&times;</span>
             </div>
-            <form onsubmit="sendInvoiceConfirm(event)">
+            <form onsubmit="rejectConfirm(event)">
                 <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> Recipient Email</label>
-                    <input type="email" id="recipientEmail" value="client@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-tag"></i> Subject</label>
-                    <input type="text" id="emailSubject" value="Invoice from AccuFlow" required>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-comment"></i> Message</label>
-                    <textarea id="emailMessage" rows="4">Please find attached invoice for your review. Thank you for your business!</textarea>
+                    <label><i class="fas fa-comment"></i> Reason for Rejection</label>
+                    <textarea id="rejectReason" rows="4" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);" required></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeSendModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Send Invoice</button>
+                    <button type="button" class="btn-secondary" onclick="closeRejectModal()">Cancel</button>
+                    <button type="submit" class="btn-danger">Reject Timesheet</button>
                 </div>
             </form>
         </div>
@@ -984,7 +1222,7 @@
             </div>
             <div style="text-align: center; padding: 20px;">
                 <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #f44336; margin-bottom: 15px;"></i>
-                <p style="margin-bottom: 20px; color: #333;">Are you sure you want to delete this invoice?</p>
+                <p style="margin-bottom: 20px; color: #333;">Are you sure you want to delete this timesheet?</p>
             </div>
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
@@ -994,14 +1232,33 @@
     </div>
 
     <script>
-        let lineItems = [];
+        let currentTimesheetId = null;
 
         // Toggle mobile menu
         function toggleMobileMenu() {
             document.getElementById('sidebar').classList.toggle('show');
         }
 
-        // Get user info
+        // Toggle sidebar collapse
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            sidebar.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
+            
+            // Change icon direction
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.className = 'fas fa-chevron-right';
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                icon.className = 'fas fa-chevron-left';
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        }
+
+        // Get user info from localStorage
         document.addEventListener('DOMContentLoaded', function() {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             if (user.fullName) {
@@ -1012,199 +1269,198 @@
                     user.role.charAt(0).toUpperCase() + user.role.slice(1);
             }
             
-            // Initialize with sample line items
-            addLineItem();
-            addLineItem();
+            // Load sidebar preference
+            const savedState = localStorage.getItem('sidebarCollapsed');
+            if (savedState === 'true') {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.getElementById('sidebarToggle');
+                sidebar.classList.add('collapsed');
+                toggleBtn.classList.add('collapsed');
+                toggleBtn.querySelector('i').className = 'fas fa-chevron-right';
+            }
+            
+            // Set default week ending to this Friday
+            const weekEnding = getWeekEndingDate();
+            document.getElementById('weekEnding').value = weekEnding;
         });
 
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchValue = this.value.toLowerCase();
-            const tableRows = document.querySelectorAll('#invoicesTable tbody tr');
-            
-            tableRows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchValue) ? '' : 'none';
-            });
-        });
+        // Get week ending date (Friday)
+        function getWeekEndingDate() {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const daysUntilFriday = (5 - dayOfWeek + 7) % 7;
+            const friday = new Date(today);
+            friday.setDate(today.getDate() + daysUntilFriday);
+            return friday.toISOString().split('T')[0];
+        }
 
-        // Filter by status
-        document.getElementById('statusFilter').addEventListener('change', filterTable);
-        document.getElementById('jobFilter').addEventListener('change', filterTable);
-
-        function filterTable() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const jobFilter = document.getElementById('jobFilter').value;
-            const tableRows = document.querySelectorAll('#invoicesTable tbody tr');
+        // Calculate overtime
+        function calculateOvertime() {
+            const hoursWorked = parseFloat(document.getElementById('hoursWorked').value) || 0;
+            const overtimeInput = document.getElementById('overtimeHours');
             
-            tableRows.forEach(row => {
-                let showRow = true;
-                
-                if (statusFilter) {
-                    const statusCell = row.querySelector('td:nth-child(8) .badge');
-                    const status = statusCell ? statusCell.textContent : '';
-                    if (status !== statusFilter) showRow = false;
-                }
-                
-                if (jobFilter && showRow) {
-                    const jobCell = row.querySelector('td:nth-child(2)');
-                    const job = jobCell ? jobCell.textContent : '';
-                    if (job !== document.querySelector(`#jobFilter option[value="${jobFilter}"]`).textContent) {
-                        showRow = false;
-                    }
-                }
-                
-                row.style.display = showRow ? '' : 'none';
-            });
+            if (hoursWorked > 40) {
+                overtimeInput.value = (hoursWorked - 40).toFixed(1);
+            } else {
+                overtimeInput.value = '0';
+            }
+        }
+
+        // Filter timesheets
+        function filterTimesheets() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const employee = document.getElementById('employeeFilter').value;
+            const job = document.getElementById('jobFilter').value;
+            
+            alert(`Filtering timesheets from ${startDate} to ${endDate}`);
+            // In real app, fetch filtered data from API
+        }
+
+        // Export timesheets
+        function exportTimesheets() {
+            alert('Exporting timesheets...');
         }
 
         // Modal functions
-        function openCreateInvoiceModal() {
-            document.getElementById('modalTitle').textContent = 'Create Invoice';
-            document.getElementById('invoiceId').value = '';
-            document.getElementById('invoiceNumber').value = 'INV-2024-00' + (Math.floor(Math.random() * 100));
-            
-            // Reset line items
-            lineItems = [];
-            addLineItem();
-            addLineItem();
-            
-            document.getElementById('invoiceModal').classList.add('show');
+        function openAddTimesheetModal() {
+            document.getElementById('modalTitle').textContent = 'Add Timesheet';
+            document.getElementById('timesheetId').value = '';
+            document.getElementById('employeeId').value = '';
+            document.getElementById('jobId').value = '';
+            document.getElementById('weekEnding').value = getWeekEndingDate();
+            document.getElementById('hoursWorked').value = '40';
+            document.getElementById('overtimeHours').value = '0';
+            document.getElementById('timesheetModal').classList.add('show');
         }
 
-        function editInvoice(id) {
-            document.getElementById('modalTitle').textContent = 'Edit Invoice';
-            document.getElementById('invoiceId').value = id;
+        function editTimesheet(id) {
+            currentTimesheetId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Timesheet';
+            document.getElementById('timesheetId').value = id;
             
-            // In a real app, fetch invoice data from API
+            // Populate with sample data
             if (id === 1) {
-                document.getElementById('invoiceNumber').value = 'INV-2024-001';
+                document.getElementById('employeeId').value = '1';
                 document.getElementById('jobId').value = '1';
-                document.getElementById('clientId').value = '1';
-                document.getElementById('invoiceDate').value = '2026-02-15';
-                document.getElementById('dueDate').value = '2026-03-15';
-                document.getElementById('retainagePercent').value = '0';
+                document.getElementById('weekEnding').value = '2026-03-28';
+                document.getElementById('hoursWorked').value = '45';
+                document.getElementById('overtimeHours').value = '5';
+            } else if (id === 2) {
+                document.getElementById('employeeId').value = '2';
+                document.getElementById('jobId').value = '2';
+                document.getElementById('weekEnding').value = '2026-03-28';
+                document.getElementById('hoursWorked').value = '40';
+                document.getElementById('overtimeHours').value = '2';
+            } else if (id === 3) {
+                document.getElementById('employeeId').value = '3';
+                document.getElementById('jobId').value = '3';
+                document.getElementById('weekEnding').value = '2026-03-28';
+                document.getElementById('hoursWorked').value = '46';
+                document.getElementById('overtimeHours').value = '4';
             }
             
-            document.getElementById('invoiceModal').classList.add('show');
+            document.getElementById('timesheetModal').classList.add('show');
         }
 
-        function sendInvoice(id) {
-            document.getElementById('sendModal').classList.add('show');
+        function viewTimesheet(id) {
+            const viewDetails = document.getElementById('viewDetails');
+            
+            let details = '';
+            if (id === 1) {
+                details = `
+                    <div style="margin-bottom: 15px;"><strong>ID:</strong> 1</div>
+                    <div style="margin-bottom: 15px;"><strong>Employee:</strong> John Doe</div>
+                    <div style="margin-bottom: 15px;"><strong>Job:</strong> Office Renovation</div>
+                    <div style="margin-bottom: 15px;"><strong>Week Ending:</strong> 28 Mar 2026</div>
+                    <div style="margin-bottom: 15px;"><strong>Regular Hours:</strong> 40</div>
+                    <div style="margin-bottom: 15px;"><strong>Overtime Hours:</strong> 5</div>
+                    <div style="margin-bottom: 15px;"><strong>Total Hours:</strong> 45</div>
+                    <div style="margin-bottom: 15px;"><strong>Pay Rate:</strong> KES 2,500</div>
+                    <div style="margin-bottom: 15px;"><strong>Total Pay:</strong> KES 118,750</div>
+                    <div style="margin-bottom: 15px;"><strong>Status:</strong> <span class="badge badge-success">Approved</span></div>
+                    <div style="margin-bottom: 15px;"><strong>Approved By:</strong> Admin User</div>
+                    <div style="margin-bottom: 15px;"><strong>Approved Date:</strong> 29 Mar 2026</div>
+                `;
+            } else if (id === 2) {
+                details = `
+                    <div style="margin-bottom: 15px;"><strong>ID:</strong> 2</div>
+                    <div style="margin-bottom: 15px;"><strong>Employee:</strong> Jane Smith</div>
+                    <div style="margin-bottom: 15px;"><strong>Job:</strong> Residential Complex</div>
+                    <div style="margin-bottom: 15px;"><strong>Week Ending:</strong> 28 Mar 2026</div>
+                    <div style="margin-bottom: 15px;"><strong>Regular Hours:</strong> 38</div>
+                    <div style="margin-bottom: 15px;"><strong>Overtime Hours:</strong> 2</div>
+                    <div style="margin-bottom: 15px;"><strong>Total Hours:</strong> 40</div>
+                    <div style="margin-bottom: 15px;"><strong>Pay Rate:</strong> KES 3,200</div>
+                    <div style="margin-bottom: 15px;"><strong>Total Pay:</strong> KES 131,200</div>
+                    <div style="margin-bottom: 15px;"><strong>Status:</strong> <span class="badge badge-warning">Pending</span></div>
+                `;
+            } else if (id === 3) {
+                details = `
+                    <div style="margin-bottom: 15px;"><strong>ID:</strong> 3</div>
+                    <div style="margin-bottom: 15px;"><strong>Employee:</strong> Mike Johnson</div>
+                    <div style="margin-bottom: 15px;"><strong>Job:</strong> Highway Bridge</div>
+                    <div style="margin-bottom: 15px;"><strong>Week Ending:</strong> 28 Mar 2026</div>
+                    <div style="margin-bottom: 15px;"><strong>Regular Hours:</strong> 42</div>
+                    <div style="margin-bottom: 15px;"><strong>Overtime Hours:</strong> 4</div>
+                    <div style="margin-bottom: 15px;"><strong>Total Hours:</strong> 46</div>
+                    <div style="margin-bottom: 15px;"><strong>Pay Rate:</strong> KES 2,800</div>
+                    <div style="margin-bottom: 15px;"><strong>Total Pay:</strong> KES 134,400</div>
+                    <div style="margin-bottom: 15px;"><strong>Status:</strong> <span class="badge badge-success">Approved</span></div>
+                `;
+            }
+            
+            viewDetails.innerHTML = details;
+            document.getElementById('viewModal').classList.add('show');
         }
 
-        function downloadInvoice(id) {
-            alert('Downloading invoice #' + id);
+        function approveTimesheet(id) {
+            if (confirm('Approve this timesheet?')) {
+                alert('Timesheet approved successfully!');
+            }
         }
 
-        function deleteInvoice(id) {
+        function rejectTimesheet(id) {
+            currentTimesheetId = id;
+            document.getElementById('rejectModal').classList.add('show');
+        }
+
+        function deleteTimesheet(id) {
+            currentTimesheetId = id;
             document.getElementById('deleteModal').classList.add('show');
         }
 
         function closeModal() {
-            document.getElementById('invoiceModal').classList.remove('show');
+            document.getElementById('timesheetModal').classList.remove('show');
         }
 
-        function closeSendModal() {
-            document.getElementById('sendModal').classList.remove('show');
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('show');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').classList.remove('show');
         }
 
         function closeDeleteModal() {
             document.getElementById('deleteModal').classList.remove('show');
         }
 
-        function addLineItem() {
-            const container = document.getElementById('lineItems');
-            const itemId = lineItems.length;
-            
-            const itemDiv = document.createElement('div');
-            itemDiv.id = `lineItem-${itemId}`;
-            itemDiv.style.display = 'grid';
-            itemDiv.style.gridTemplateColumns = '3fr 1fr 1fr 1fr 40px';
-            itemDiv.style.gap = '10px';
-            itemDiv.style.marginBottom = '10px';
-            
-            itemDiv.innerHTML = `
-                <input type="text" class="item-desc" placeholder="Description" value="Item ${itemId + 1}" onchange="updateLineItem(${itemId})">
-                <input type="number" class="item-qty" value="1" min="1" onchange="updateLineItem(${itemId})">
-                <input type="number" class="item-price" value="${(itemId + 1) * 10000}" min="0" onchange="updateLineItem(${itemId})">
-                <input type="text" class="item-amount" value="KES ${(itemId + 1) * 10000}" readonly>
-                <button type="button" class="btn-danger" style="padding: 8px;" onclick="removeLineItem(${itemId})">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            container.appendChild(itemDiv);
-            lineItems.push({
-                id: itemId,
-                desc: `Item ${itemId + 1}`,
-                qty: 1,
-                price: (itemId + 1) * 10000
-            });
-            
-            calculateTotals();
-        }
-
-        function updateLineItem(id) {
-            const itemDiv = document.getElementById(`lineItem-${id}`);
-            const desc = itemDiv.querySelector('.item-desc').value;
-            const qty = parseFloat(itemDiv.querySelector('.item-qty').value) || 0;
-            const price = parseFloat(itemDiv.querySelector('.item-price').value) || 0;
-            const amount = qty * price;
-            
-            itemDiv.querySelector('.item-amount').value = 'KES ' + amount.toLocaleString();
-            
-            // Update array
-            const index = lineItems.findIndex(i => i.id === id);
-            if (index !== -1) {
-                lineItems[index] = { id, desc, qty, price };
-            }
-            
-            calculateTotals();
-        }
-
-        function removeLineItem(id) {
-            const itemDiv = document.getElementById(`lineItem-${id}`);
-            itemDiv.remove();
-            
-            const index = lineItems.findIndex(i => i.id === id);
-            if (index !== -1) {
-                lineItems.splice(index, 1);
-            }
-            
-            calculateTotals();
-        }
-
-        function calculateTotals() {
-            let subtotal = 0;
-            
-            lineItems.forEach(item => {
-                subtotal += item.qty * item.price;
-            });
-            
-            const retainagePercent = parseFloat(document.getElementById('retainagePercent').value) || 0;
-            const retainageAmount = subtotal * (retainagePercent / 100);
-            const total = subtotal - retainageAmount;
-            
-            document.getElementById('subtotal').textContent = 'KES ' + subtotal.toLocaleString();
-            document.getElementById('retainageAmount').textContent = 'KES ' + retainageAmount.toLocaleString();
-            document.getElementById('totalAmount').textContent = 'KES ' + total.toLocaleString();
-        }
-
-        function saveInvoice(event) {
+        function saveTimesheet(event) {
             event.preventDefault();
-            alert('Invoice saved successfully!');
+            alert('Timesheet saved successfully!');
             closeModal();
         }
 
-        function sendInvoiceConfirm(event) {
+        function rejectConfirm(event) {
             event.preventDefault();
-            alert('Invoice sent successfully!');
-            closeSendModal();
+            const reason = document.getElementById('rejectReason').value;
+            alert(`Timesheet rejected. Reason: ${reason}`);
+            closeRejectModal();
         }
 
         function confirmDelete() {
-            alert('Invoice deleted successfully!');
+            alert('Timesheet deleted successfully!');
             closeDeleteModal();
         }
 
